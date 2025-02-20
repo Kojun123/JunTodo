@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/zxtodoxz?serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: kwonojou1120
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+  thymeleaf:
+    cache: false
+  mvc:
+    view:
+      prefix: /WEB-INF/view/
+      suffix: .jsp
