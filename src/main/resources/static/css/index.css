@@ -1,42 +1,99 @@
+/* ✅ 전체 페이지 스타일 */
 body {
-    background-color: #f8f9fa;
     font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    height: 100vh;
+    margin: 0;
 }
 
-.container {
-    max-width: 800px;
-    margin: 50px auto;
+/* ✅ 레이아웃 조정 */
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+/* ✅ 사이드바 스타일 */
+.sidebar {
+    width: 250px;
+    background-color: #ffe4e1;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.sidebar-header {
+    font-size: 1.5rem;
+    font-weight: bold;
     text-align: center;
-    color: #333;
     margin-bottom: 20px;
 }
 
-.form-control {
-    margin-bottom: 10px;
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
 }
 
-table {
-    width: 100%;
-    margin-top: 20px;
-}
-
-table th, table td {
-    text-align: center;
+.sidebar-menu li {
     padding: 10px;
 }
 
-.btn {
-    margin: 2px;
+.sidebar-menu li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
 }
 
-.completed {
-    text-decoration: line-through;
-    color: gray;
+.sidebar-menu li a:hover {
+    background-color: #ffb6c1;
+    color: white;
+}
+
+/* ✅ 메인 콘텐츠 스타일 */
+.content {
+    flex-grow: 1;
+    padding: 30px;
+}
+
+/* ✅ 상단 헤더 */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* ✅ 할 일 리스트 */
+.todo-list {
+    margin-top: 20px;
+}
+
+.list-group-item {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 체크박스와 텍스트 정렬 */
+.list-group-item div {
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* ✅ 버튼 스타일 */
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.9rem;
 }
