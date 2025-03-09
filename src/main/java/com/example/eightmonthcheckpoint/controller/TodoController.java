@@ -3,6 +3,8 @@ package com.example.eightmonthcheckpoint.controller;
 
 import com.example.eightmonthcheckpoint.domain.Todo;
 import com.example.eightmonthcheckpoint.service.TodoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,23 +19,41 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<Todo> getAllTodos() {
-        return todoService.getAllTodos();
+    public ResponseEntity<List<Todo>> getAllTodos() {
+        List<Todo> todos = todoService.getAllTodos();
+
+        if (todos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(todos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
+        Todo todo = todoService.getTodoById(id);
+        if(todo==null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(todo);
     }
 
     @PostMapping
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoService.addTodo(todo);
+    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo)
+    {
+        Todo createdTodo = todoService.addTodo(todo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTodo);
+
     }
 
     @PutMapping("/{id}")
-    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
-        return todoService.updateTodo(id, todo);
+    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+        Todo updatedTodo = todoService.updateTodo(id, todo);
+        if (updatedTodo == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.ok(updatedTodo);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable Long id) {
-        todoService.deleteTodo(id);
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        boolean isDel = todoService.deleteTodo(id);
+        if (isDel) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
 

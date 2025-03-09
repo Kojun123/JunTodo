@@ -28,7 +28,7 @@
     <main class="content">
         <header class="content-header">
             <h2>오늘</h2>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">+ 작업 추가</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" onclick="fn_modalOpen()" >+ 작업 추가</button>
         </header>
 
         <div class="todo-list">
@@ -55,7 +55,7 @@
                     <label>설명:</label>
                     <input type="text" id="description" name="description" class="form-control">
                     <label>우선순위:</label>
-                    <select id="modalPriority" name="modalPriority" class="form-select">
+                    <select id="priority" name="priority" class="form-select">
                         <option value="low">낮음</option>
                         <option value="medium">보통</option>
                         <option value="high">높음</option>
@@ -97,7 +97,7 @@
                                     <span class="\${priorityClass}">\${todo.title}</span> - \${todo.description}
                                 </div>
                                 <div>
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id})">✏ 수정</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
                                 </div>
                             </li>
@@ -115,14 +115,15 @@
 
         const form = document.getElementById("editForm");  // 폼 요소 가져오기
         const formData = new FormData(form);  // FormData 객체 생성
-        console.log('!!',formData)
         const todo = Object.fromEntries(formData);  // JSON 변환
+
         console.log('save', todo);
 
         axios.post("/api/todos", todo)
             .then(response => {
                 loadTodos();  // 목록 새로고침
                 resetForm();  // 입력 폼 초기화
+                $("#editModal").modal("hide");
             })
             .catch(error => console.error("할 일 추가 실패:", error));
     }
@@ -139,7 +140,7 @@
 
     //  할 일 삭제하기
     function deleteTodo(id) {
-        axios.delete(`/api/todos/${id}`)
+        axios.delete(`/api/todos/\${id}`)
             .then(response => loadTodos())
             .catch(error => console.error("할 일 삭제 실패:", error));
     }
@@ -151,13 +152,37 @@
             .catch(error => console.error("완료 상태 변경 실패:", error));
     }
 
+    // 수정&추가 모달 폼초기화
     function resetForm() {
-        $("#todoId").val("");          // 숨겨진 ID 필드 초기화
+        $("#id").val("");          // 숨겨진 ID 필드 초기화
         $("#title").val("");           // 제목 입력 필드 초기화
         $("#description").val("");     // 설명 입력 필드 초기화
         $("#priority").val("low");     // 우선순위를 기본값("low")으로 설정
-        $("#modalCompleted").prop("checked", false); // 완료 체크박스 초기화
+        $("#completed").prop("checked", false); // 완료 체크박스 초기화
     }
+
+    // 수정모달오픈
+    function openEditModal(id) {
+        axios.get(`/api/todos/\${id}`)
+            .then(response => {
+                resetForm();
+                console.log('open modal', response.data);
+                const data = response.data;
+                $("#id").val(data.id);
+                $("#title").val(data.title);
+                $("#description").val(data.description);
+                $("#priority").val(data.priority);
+                $("#completed").prop("checked", data.completed);
+
+                $('#editModal').modal('show');
+            }).catch(error => console.error("할 일 불러오기 실패 : ", error));
+    }
+
+    function fn_modalOpen() {
+        resetForm();
+        $('#editModal').modal('show');
+    }
+
 </script>
 </body>
 </html>

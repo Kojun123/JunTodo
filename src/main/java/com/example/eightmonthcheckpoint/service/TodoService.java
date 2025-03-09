@@ -32,13 +32,15 @@ public class TodoService {
         if (todo != null) {
             todo.setTitle(updateTodo.getTitle());
             todo.setDescription(updateTodo.getDescription());
-            todo.setCompleted(updateTodo.isCompleted());
+            todo.setPriority(updateTodo.getPriority());
+            todo.setCompleted(updateTodo.getDescription());
             todoRepository.save(todo);
         }
         return todo;
     }
 
-    public void deleteTodo(Long id) {
+    public boolean deleteTodo(Long id) {
         todoRepository.deleteById(id);
+        return false;
     }
 }

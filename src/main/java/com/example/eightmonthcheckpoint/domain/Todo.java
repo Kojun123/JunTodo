@@ -19,12 +19,17 @@ public class Todo {
 
     @JsonProperty("title")
     private String title;
+    @JsonProperty("description")
     private String description;
-    private boolean completed;
+    @JsonProperty("priority")
+    private String priority;
+    @JsonProperty("completed")
+    private String completed;
 
-    public Todo(String title, String description, boolean completed) {
+    public Todo(String title, String description, String priority, String completed) {
         this.title = title;
         this.description = description;
-        this.completed = false;
+        this.priority = priority;
+        this.completed = completed;
     }
 }
