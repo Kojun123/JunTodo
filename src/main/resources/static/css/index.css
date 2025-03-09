@@ -1,4 +1,4 @@
-/* ✅ 전체 페이지 스타일 */
+/*  전체 페이지 스타일 */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
@@ -7,13 +7,13 @@ body {
     margin: 0;
 }
 
-/* ✅ 레이아웃 조정 */
+/*  레이아웃 조정 */
 .wrapper {
     display: flex;
     width: 100%;
 }
 
-/* ✅ 사이드바 스타일 */
+/*  사이드바 스타일 */
 .sidebar {
     width: 250px;
     background-color: #ffe4e1;
@@ -52,13 +52,13 @@ body {
     color: white;
 }
 
-/* ✅ 메인 콘텐츠 스타일 */
+/*  메인 콘텐츠 스타일 */
 .content {
     flex-grow: 1;
     padding: 30px;
 }
 
-/* ✅ 상단 헤더 */
+/*  상단 헤더 */
 .content-header {
     display: flex;
     justify-content: space-between;
@@ -66,10 +66,20 @@ body {
     margin-bottom: 20px;
 }
 
-/* ✅ 할 일 리스트 */
 .todo-list {
-    margin-top: 20px;
+    padding: 20px;
 }
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.completed-card {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
 
 .list-group-item {
     background: white;
@@ -82,7 +92,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ 체크박스와 텍스트 정렬 */
+/*  체크박스와 텍스트 정렬 */
 .list-group-item div {
     display: flex;
     align-items: center;
@@ -92,8 +102,28 @@ body {
     margin-right: 10px;
 }
 
-/* ✅ 버튼 스타일 */
+/* 버튼 스타일 */
 .btn-sm {
     padding: 5px 10px;
     font-size: 0.9rem;
 }
+
+.floating-add-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.floating-add-btn:hover {
+    background-color: #0056b3;
+}
+

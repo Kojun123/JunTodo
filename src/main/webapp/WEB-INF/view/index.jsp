@@ -26,18 +26,23 @@
 
     <!-- 메인 컨텐츠 -->
     <main class="content">
-        <header class="content-header">
-            <h2>오늘</h2>
-            <button class="btn btn-primary" data-bs-toggle="modal" onclick="fn_modalOpen()" >+ 작업 추가</button>
-        </header>
+<%--        <header class="content-header">--%>
+<%--            <h2>오늘</h2>--%>
+<%--            <button class="btn btn-primary" data-bs-toggle="modal" onclick="fn_modalOpen()" >+ 작업 추가</button>--%>
+<%--        </header>--%>
 
         <div class="todo-list">
-            <ul id="todoTableBody" class="list-group">
+            <ul id="todoTableBody" class="row">
                 <!--할 일 리스트-->
             </ul>
         </div>
     </main>
 </div>
+
+<button class="floating-add-btn" onclick="openEditModal()">
+    +
+</button>
+
 
 <!-- 수정/추가 모달 -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -79,34 +84,44 @@
     });
 
     function loadTodos() {
-        $.ajax({
-            url: "/api/todos",
-            type: "GET",
-            dataType: "json",
-            success: function(todos) {
-                console.log("loadTodos", todos);
+        axios.get("/api/todos")
+            .then(response => {
                 $("#todoTableBody").empty();
-                todos.forEach(todo => {
-                    let priorityClass = todo.priority === "high" ? "text-danger" :
-                        todo.priority === "medium" ? "text-warning" : "text-success";
+                response.data.forEach(todo => {
+                    let priorityColor = todo.priority === "high" ? "danger" :
+                        todo.priority === "medium" ? "warning" : "success";
 
-                    let listItem = `
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <input type="checkbox" class="form-check-input me-2" onchange="toggleComplete(\${todo.id}, this)" \${todo.completed ? 'checked' : ''}>
-                                    <span class="\${priorityClass}">\${todo.title}</span> - \${todo.description}
+                    let completedClass = todo.completed ? "completed-card" : "";
+                    let checked = todo.completed ? "checked" : "";
+
+                    let card = `
+                    <div class="col-md-4">
+                        <div class="card ${completedClass} mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title text-${priorityColor}">
+                                    ${todo.title}
+                                </h5>
+                                <p class="card-text">${todo.description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <input type="checkbox" ${checked} onclick="toggleComplete(${todo.id}, this)">
+                                        <span class="badge bg-${priorityColor}">${todo.priority}</span>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(${todo.id})">✏ 수정</button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(${todo.id})">🗑 삭제</button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id})">✏ 수정</button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
-                                </div>
-                            </li>
-                        `;
-                    $("#todoTableBody").append(listItem);
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    $("#todoTableBody").append(card);
                 });
-            }
-        });
+            })
+            .catch(error => console.error("할 일 목록 불러오기 실패:", error));
     }
+
 
 
     // 할 일 추가하기
