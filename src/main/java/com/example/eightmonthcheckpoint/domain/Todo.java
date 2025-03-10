@@ -1,6 +1,7 @@
 package com.example.eightmonthcheckpoint.domain;
 
 
+import com.example.eightmonthcheckpoint.domain.Enum.Priority;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,12 +22,14 @@ public class Todo {
     private String title;
     @JsonProperty("description")
     private String description;
+
     @JsonProperty("priority")
-    private String priority;
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
     @JsonProperty("completed")
     private String completed;
 
-    public Todo(String title, String description, String priority, String completed) {
+    public Todo(String title, String description, Priority priority, String completed) {
         this.title = title;
         this.description = description;
         this.priority = priority;

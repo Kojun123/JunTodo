@@ -2,6 +2,7 @@ package com.example.eightmonthcheckpoint.service;
 
 import com.example.eightmonthcheckpoint.domain.Todo;
 import com.example.eightmonthcheckpoint.repository.TodoRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +15,10 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
+
     public List<Todo> getAllTodos() {
-        return todoRepository.findAll();
+//        return todoRepository.findAll();
+        return todoRepository.findAllByCustomPriority();
     }
 
     public Todo getTodoById(Long id) {

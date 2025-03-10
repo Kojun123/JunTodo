@@ -39,7 +39,7 @@
     </main>
 </div>
 
-<button class="floating-add-btn" onclick="openEditModal()">
+<button class="floating-add-btn" onclick="fn_modalOpen()">
     +
 </button>
 
@@ -61,9 +61,9 @@
                     <input type="text" id="description" name="description" class="form-control">
                     <label>우선순위:</label>
                     <select id="priority" name="priority" class="form-select">
-                        <option value="low">낮음</option>
-                        <option value="medium">보통</option>
-                        <option value="high">높음</option>
+                        <option value="LOW">낮음</option>
+                        <option value="MEDIUM">보통</option>
+                        <option value="HIGH">높음</option>
                     </select>
                     <label>완료 여부:</label>
                     <input type="checkbox" name="completed" id="completed">
@@ -88,28 +88,25 @@
             .then(response => {
                 $("#todoTableBody").empty();
                 response.data.forEach(todo => {
-                    let priorityColor = todo.priority === "high" ? "danger" :
-                        todo.priority === "medium" ? "warning" : "success";
+                    let priorityColor = todo.priority === "HIGH" ? "danger" :
+                        todo.priority === "MEDIUM" ? "warning" : "success";
 
+                    let completedIcon = todo.completed ? `<span class="completed-icon">✔️</span>` : "";
                     let completedClass = todo.completed ? "completed-card" : "";
-                    let checked = todo.completed ? "checked" : "";
 
                     let card = `
                     <div class="col-md-4">
-                        <div class="card ${completedClass} mb-3">
+                        <div class="card \${completedClass} mb-3">
                             <div class="card-body">
-                                <h5 class="card-title text-${priorityColor}">
-                                    ${todo.title}
+                                <h5 class="card-title text-\${priorityColor}">
+                                    \${completedIcon} \${todo.title}
                                 </h5>
-                                <p class="card-text">${todo.description}</p>
+                                <p class="card-text">\${todo.description}</p>
                                 <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
                                     <div>
-                                        <input type="checkbox" ${checked} onclick="toggleComplete(${todo.id}, this)">
-                                        <span class="badge bg-${priorityColor}">${todo.priority}</span>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(${todo.id})">✏ 수정</button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(${todo.id})">🗑 삭제</button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id})">✏ 수정</button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +118,7 @@
             })
             .catch(error => console.error("할 일 목록 불러오기 실패:", error));
     }
+
 
 
 
@@ -172,7 +170,7 @@
         $("#id").val("");          // 숨겨진 ID 필드 초기화
         $("#title").val("");           // 제목 입력 필드 초기화
         $("#description").val("");     // 설명 입력 필드 초기화
-        $("#priority").val("low");     // 우선순위를 기본값("low")으로 설정
+        $("#priority").val("LOW");     // 우선순위를 기본값("low")으로 설정
         $("#completed").prop("checked", false); // 완료 체크박스 초기화
     }
 
