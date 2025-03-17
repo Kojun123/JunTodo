@@ -129,7 +129,8 @@ body {
 
 /* 할 일 체크 스타일 */
 .completed-card {
-    opacity: 0.7;
+    background-color: #e6ffe6; /* 완료된 항목은 연한 초록색 배경 */
+    opacity: 0.8;
     text-decoration: line-through;
 }
 
@@ -137,5 +138,33 @@ body {
     color: green;
     font-size: 1.2em;
     margin-right: 5px;
+    vertical-align: middle;
 }
+
+.incomplete-icon {
+    color: gray;
+    font-size: 1.2em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/*  모달 전체 디자인 개선 */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+}
+
+/*  입력 필드 디자인 */
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+/*  버튼 스타일 */
+.btn-close-white {
+    filter: invert(1);
+}
+
+
 
