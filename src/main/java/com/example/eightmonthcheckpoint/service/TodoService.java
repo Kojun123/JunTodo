@@ -5,6 +5,9 @@ import com.example.eightmonthcheckpoint.repository.TodoRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,10 +18,29 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-
-    public List<Todo> getAllTodos() {
-//        return todoRepository.findAll();
+    public List<Todo> getAllTodo() {
         return todoRepository.findAllByCustomPriority();
+    }
+
+    public List<Todo> getTodayTodos() {
+//        return todoRepository.findAll();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        List<Todo> allTodos = todoRepository.findAllByCustomPriority();
+        List<Todo> todayTodos = new ArrayList<>();
+
+        for (Todo todo : allTodos) {
+            if (todo.getCreatedAt().toLocalDate().format(formatter).equals(today.format(formatter))){
+                todayTodos.add(todo);
+            }
+        }
+
+        return todayTodos;
+    }
+
+    public List<Todo> getCompletedTodos() {
+        return todoRepository.findByCompletedTrue();
     }
 
     public Todo getTodoById(Long id) {
@@ -36,7 +58,7 @@ public class TodoService {
             todo.setTitle(updateTodo.getTitle());
             todo.setDescription(updateTodo.getDescription());
             todo.setPriority(updateTodo.getPriority());
-            todo.setCompleted(updateTodo.getDescription());
+            todo.setCompleted(updateTodo.getCompleted());
             todoRepository.save(todo);
         }
         return todo;

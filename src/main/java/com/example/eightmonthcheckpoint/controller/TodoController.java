@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,10 +20,17 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> getAllTodos() {
-        List<Todo> todos = todoService.getAllTodos();
+    public ResponseEntity<List<Todo>> getFiltersTodos(@RequestParam(required = false) String filter) {
+        List<Todo> todos = new ArrayList<>();
 
-        if (todos.isEmpty()) return ResponseEntity.noContent().build();
+        if ("today".equals(filter)) {
+            todos = todoService.getTodayTodos();
+        } else if("completed".equals(filter)) {
+            todos = todoService.getCompletedTodos();
+        } else if("all".equals(filter)) {
+            todos = todoService.getAllTodo();
+        }
+
         return ResponseEntity.ok(todos);
     }
 

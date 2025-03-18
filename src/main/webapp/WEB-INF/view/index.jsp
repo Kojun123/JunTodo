@@ -17,10 +17,11 @@
             <h2>📋 TODO</h2>
         </div>
         <ul class="sidebar-menu">
-            <li class="active"><a href="#">오늘</a></li>
-            <li><a href="#">다음</a></li>
-            <li><a href="#">완료된 작업</a></li>
-            <li><a href="#">설정</a></li>
+            <%-- today, completed, all --%>
+            <li class="active"><a href="#" onclick="loadTodos('today')">📅 오늘</a></li>
+<%--            <li><a href="#">다음</a></li>--%>
+            <li><a href="#" onclick="loadTodos('completed')">✔️ 완료된 할 일</a></li>
+            <li><a href="#" onclick="loadTodos('all')">🔄 전체 보기</a></li>
         </ul>
     </aside>
 
@@ -100,13 +101,16 @@
         loadTodos();
     });
 
-    function loadTodos() {
-        axios.get("/api/todos")
+    function loadTodos(filterType="all") {
+        axios.get(`/api/todos?filter=\${filterType}`)
             .then(response => {
                 $("#todoTableBody").empty();
                 response.data.forEach(todo => {
                     let priorityColor = todo.priority === "high" ? "danger" :
                         todo.priority === "medium" ? "warning" : "success";
+
+                    let createdDate = new Date(todo.createdAt);
+                    let formattedDate = `\${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
 
                     // 완료 여부 아이콘 변경
                     let completedIcon = todo.completed
@@ -118,7 +122,8 @@
                     let card = `
                     <div class="col-md-4">
                         <div class="card \${completedClass} mb-3">
-                            <div class="card-body">
+                           <div class="card-body position-relative">
+                                <small class="created-date position-absolute top-0 end-0 me-2 mt-2 text-muted">\${formattedDate}</small>
                                 <h5 class="card-title text-\${priorityColor}" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
                                     \${completedIcon} \${todo.title}
                                 </h5>
@@ -151,6 +156,14 @@
         const form = document.getElementById("editForm");  // 폼 요소 가져오기
         const formData = new FormData(form);  // FormData 객체 생성
         const todo = Object.fromEntries(formData);  // JSON 변환
+
+        // todo.forEach(item => {
+        //    if(item.completed) {
+        //        $("#id").val(item.id);
+        //
+        //
+        //    }
+        // });
 
         console.log('save', todo);
 
