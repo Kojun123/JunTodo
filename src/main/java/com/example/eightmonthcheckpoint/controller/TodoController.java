@@ -20,7 +20,7 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> getFiltersTodos(@RequestParam(required = false) String filter) {
+    public ResponseEntity<List<Todo>> getFiltersTodos(@RequestParam(required = true) String filter) {
         List<Todo> todos = new ArrayList<>();
 
         if ("today".equals(filter)) {

@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -35,6 +36,9 @@ public class Todo {
     @JsonProperty("completed")
     private String completed;
 
+    @Column
+    private LocalDate dueDate;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -42,10 +46,11 @@ public class Todo {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Todo(String title, String description, Priority priority, String completed) {
+    public Todo(String title, String description, Priority priority, String completed, LocalDate dueDate) {
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.completed = completed;
+        this.dueDate = dueDate;
     }
 }

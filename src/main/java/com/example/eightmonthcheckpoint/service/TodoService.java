@@ -40,7 +40,7 @@ public class TodoService {
     }
 
     public List<Todo> getCompletedTodos() {
-        return todoRepository.findByCompletedTrue();
+        return todoRepository.findByCompletedOn();
     }
 
     public Todo getTodoById(Long id) {
@@ -59,6 +59,7 @@ public class TodoService {
             todo.setDescription(updateTodo.getDescription());
             todo.setPriority(updateTodo.getPriority());
             todo.setCompleted(updateTodo.getCompleted());
+            todo.setDueDate(updateTodo.getDueDate());
             todoRepository.save(todo);
         }
         return todo;

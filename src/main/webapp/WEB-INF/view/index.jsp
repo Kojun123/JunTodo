@@ -69,6 +69,12 @@
                     <input type="text" id="description" name="description" class="form-control" placeholder="할 일에 대한 설명">
                 </div>
 
+                <!-- 마감일 선택 -->
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-calendar-event"></i> 마감일</label>
+                    <input type="date" id="dueDate" name="dueDate" class="form-control">
+                </div>
+
                 <!--  우선순위 선택 -->
                 <div class="mb-3">
                     <label class="form-label"><i class="bi bi-flag"></i> 우선순위</label>
@@ -118,15 +124,26 @@
                         : `<span class="incomplete-icon">❌</span>`;
 
                     let completedClass = todo.completed ? "completed-card" : "";
+                    let dDayText = "";
+                    if (todo.dueDate) {
+                        const due = new Date(todo.dueDate);
+                        const today = new Date();
+                        const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+
+                        if (diff === 0) dDayText = "🔥 오늘 마감";
+                        else if (diff < 0) dDayText = `❗ 마감 \${-diff}일 지남`;
+                        else dDayText = `D-\${diff}`;
+                    }
 
                     let card = `
                     <div class="col-md-4">
                         <div class="card \${completedClass} mb-3">
                            <div class="card-body position-relative">
                                 <small class="created-date position-absolute top-0 end-0 me-2 mt-2 text-muted">\${formattedDate}</small>
-                                <h5 class="card-title text-\${priorityColor}" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
+                                <h5 class="card-title text-\${priorityColor} mb-1" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
                                     \${completedIcon} \${todo.title}
                                 </h5>
+                                <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">\${dDayText}</small>
                                 <p class="card-text">\${todo.description}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
@@ -222,7 +239,7 @@
                 $("#description").val(data.description);
                 $("#priority").val(data.priority);
                 $("#completed").prop("checked", data.completed);
-
+                $("#dueDate").val(data.dueDate || "");
                 $('#editModal').modal('show');
             }).catch(error => console.error("할 일 불러오기 실패 : ", error));
     }
