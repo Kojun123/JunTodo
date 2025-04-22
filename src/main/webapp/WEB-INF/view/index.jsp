@@ -7,9 +7,12 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <!-- full calender부분 -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
 
 </head>
 <body>
+<%--<div id='calendar'></div>--%>
 <div class="wrapper">
     <!-- 왼쪽 사이드바 -->
     <aside class="sidebar">
@@ -25,18 +28,28 @@
         </ul>
     </aside>
 
+    <div id="cardView">
+        <div id="todoTableBody" class="row">
+            <!--할 일 리스트-->
+        </div>
+    </div>
+
+    <!-- 캘린더 뷰 -->
+    <div id="calendarView" class="d-none">
+        <div id="calendar"></div>
+    </div>
+
+
     <!-- 메인 컨텐츠 -->
     <main class="content">
+        <div class="view-toggle d-flex justify-content-center gap-3 my-3">
+            <button class="btn btn-primary" onclick="showCardView()">📋 카드형 보기</button>
+            <button class="btn btn-outline-primary" onclick="showCalendarView()">📅 캘린더 보기</button>
+        </div>
 <%--        <header class="content-header">--%>
 <%--            <h2>오늘</h2>--%>
 <%--            <button class="btn btn-primary" data-bs-toggle="modal" onclick="fn_modalOpen()" >+ 작업 추가</button>--%>
 <%--        </header>--%>
-
-        <div class="todo-list">
-            <ul id="todoTableBody" class="row">
-                <!--할 일 리스트-->
-            </ul>
-        </div>
     </main>
 </div>
 
@@ -248,6 +261,52 @@
         resetForm();
         $('#editModal').modal('show');
     }
+
+    // full calender 초기화
+    function renderCalendar() {
+        const calendarEl = document.getElementById("calendar");
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            locale: "ko",
+            events: function(fetchInfo, successCallback, failureCallback) {
+                axios.get("/api/todos")
+                    .then(res => {
+                        const events = res.data
+                            .filter(todo => todo.dueDate)
+                            .map(todo => ({
+                                id: todo.id,
+                                title: todo.title,
+                                start: todo.dueDate,
+                                allDay: true
+                            }));
+                        successCallback(events);
+                    })
+                    .catch(err => failureCallback(err));
+            },
+            eventClick: function(info) {
+                alert("할 일: " + info.event.title);
+            }
+        });
+
+        calendar.render();
+    }
+
+    //탭전환
+    function showCardView() {
+        $("#cardView").removeClass("d-none");
+        $("#calendarView").addClass("d-none");
+    }
+
+    function showCalendarView() {
+        $("#cardView").addClass("d-none");
+        $("#calendarView").removeClass("d-none");
+
+        if (!window.calendarRendered) {
+            renderCalendar();
+            window.calendarRendered = true;
+        }
+    }
+
 
 </script>
 </body>

@@ -172,6 +172,14 @@ body {
     color: #6c757d; /* Bootstrap text-muted 색상 */
 }
 
+#calendarView {
+    padding: 10px;
+}
+#calendar {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 
 
 
