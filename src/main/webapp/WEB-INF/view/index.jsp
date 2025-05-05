@@ -25,6 +25,15 @@
 <%--            <li><a href="#">다음</a></li>--%>
             <li><a href="#" onclick="loadTodos('completed')">✔️ 완료된 할 일</a></li>
             <li><a href="#" onclick="loadTodos('all')">🔄 전체 보기</a></li>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        ⚙️ 설정
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="showCardView()">📋 카드형 보기</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showCalendarView()">📅 캘린더 보기</a></li>
+                    </ul>
+                </div>
         </ul>
     </aside>
 
@@ -38,19 +47,6 @@
     <div id="calendarView" class="d-none">
         <div id="calendar"></div>
     </div>
-
-
-    <!-- 메인 컨텐츠 -->
-    <main class="content">
-        <div class="view-toggle d-flex justify-content-center gap-3 my-3">
-            <button class="btn btn-primary" onclick="showCardView()">📋 카드형 보기</button>
-            <button class="btn btn-outline-primary" onclick="showCalendarView()">📅 캘린더 보기</button>
-        </div>
-<%--        <header class="content-header">--%>
-<%--            <h2>오늘</h2>--%>
-<%--            <button class="btn btn-primary" data-bs-toggle="modal" onclick="fn_modalOpen()" >+ 작업 추가</button>--%>
-<%--        </header>--%>
-    </main>
 </div>
 
 <button class="floating-add-btn" onclick="fn_modalOpen()">
@@ -149,26 +145,27 @@
                     }
 
                     let card = `
-                    <div class="col-md-4">
-                        <div class="card \${completedClass} mb-3">
-                           <div class="card-body position-relative">
-                                <small class="created-date position-absolute top-0 end-0 me-2 mt-2 text-muted">\${formattedDate}</small>
-                                <h5 class="card-title text-\${priorityColor} mb-1" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
-                                    \${completedIcon} \${todo.title}
-                                </h5>
-                                <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">\${dDayText}</small>
-                                <p class="card-text">\${todo.description}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
-                                    <div>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
+                            <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                <div class="card \${completedClass}">
+                                   <div class="card-body position-relative">
+                                        <small class="created-date position-absolute top-0 end-0 me-2 mt-2 text-muted">\${formattedDate}</small>
+                                        <h5 class="card-title text-\${priorityColor} mb-1" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
+                                            \${completedIcon} \${todo.title}
+                                        </h5>
+                                        <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">\${dDayText}</small>
+                                        <p class="card-text">\${todo.description}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                `;
+                            `;
+
                     $("#todoTableBody").append(card);
                 });
             })

@@ -24,3 +24,9 @@ spring:
     view:
       prefix: /WEB-INF/view/
       suffix: .jsp
+      resolve-hidden: false
+    static-path-pattern: /static/**
+logging:
+  level:
+    root: DEBUG
+    org.springframework.security: DEBUG

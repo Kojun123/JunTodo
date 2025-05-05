@@ -75,6 +75,12 @@ body {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .completed-card {
     opacity: 0.6;
     text-decoration: line-through;
@@ -180,6 +186,18 @@ body {
     margin: 0 auto;
 }
 
+#todoTableBody {
+    margin-top: 1rem;
+}
+#todoTableBody > .col-md-4 {
+    flex: 0 0 auto;
+    width: 32%; /* 또는 Bootstrap 그리드 기준에 맞춰 33.333% */
+}
+
+#cardView {
+    width: 100%;
+    padding: 20px;
+}
 
 
 
