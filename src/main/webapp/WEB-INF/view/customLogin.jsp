@@ -40,6 +40,7 @@
 
             <div class="d-grid mt-4">
                 <button type="submit" class="btn btn-primary">로그인</button>
+                <a href="${pageContext.request.contextPath}/register" class="btn btn-secondary mt-3" >회원가입</a>
             </div>
         </form>
     </div>

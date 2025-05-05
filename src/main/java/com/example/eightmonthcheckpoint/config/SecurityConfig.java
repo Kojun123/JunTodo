@@ -19,15 +19,15 @@ public class SecurityConfig {
         System.out.println("시큐리티 설정 로딩됨");
 
         http
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/customLogin", "/register" , "/doLogin", "/css/**", "/js/**").permitAll()
+                                .anyRequest().authenticated()
+                )
                 .formLogin(form -> form
                         .loginPage("/customLogin").permitAll()
                         .loginProcessingUrl("/doLogin")
                         .defaultSuccessUrl("/loginSuccess", true)
                         .permitAll()
-                )
-                .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/", "/customLogin", "/doLogin", "/css/**", "/js/**").permitAll()
-                                .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable());
 
