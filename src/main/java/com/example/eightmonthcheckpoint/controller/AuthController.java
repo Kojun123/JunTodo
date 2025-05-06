@@ -1,30 +1,32 @@
 package com.example.eightmonthcheckpoint.controller;
 
 import com.example.eightmonthcheckpoint.domain.User;
+import com.example.eightmonthcheckpoint.dto.UserRequestDto;
 import com.example.eightmonthcheckpoint.repository.UserRepository;
+import com.example.eightmonthcheckpoint.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.juli.logging.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequiredArgsConstructor
 public class AuthController {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
+
+    // 로그인 페이지 반환
     @GetMapping("/customLogin")
     public String login() {
         return "customLogin";
-    }
-
-    @GetMapping("/register")
-    public String registerForm() {
-        return "register";
     }
 
     @GetMapping("/loginSuccess")
@@ -33,20 +35,23 @@ public class AuthController {
         return "✅ 로그인 성공!";
     }
 
+    // 회원가입 페이지 반환
+    @GetMapping("/register")
+    public String registerForm() {
+        return "register";
+    }
+
+    // 회원가입
     @PostMapping("/register")
-    public String register(@RequestParam String username,
-                           @RequestParam String password) {
-        if (userRepository.findByName(username).isPresent()) {
-            return "redirect:/register?error=exists";
+    public String register(@ModelAttribute UserRequestDto dto, Model model) {
+        if (userService.existsByName(dto.getRole())) {
+            model.addAttribute("error", "이미 존재하는 사용자 입니다.");
+            return "register";
         }
 
-        User user = new User();
-        user.setName(username);
-        user.setPassWord(passwordEncoder.encode(password));
-        user.setRole("USER");
-
-        userRepository.save(user);
-        return "redirect:/login?registerSuccess";
+        userService.register(dto);
+        System.out.println("회원가입 완료");
+        return "redirect:/customLogin";
     }
 }
 

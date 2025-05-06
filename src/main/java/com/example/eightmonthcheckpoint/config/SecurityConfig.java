@@ -3,6 +3,7 @@ package com.example.eightmonthcheckpoint.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -20,7 +21,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/customLogin", "/register" , "/doLogin", "/css/**", "/js/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                                .requestMatchers("/customLogin", "/doLogin", "/css/**", "/js/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

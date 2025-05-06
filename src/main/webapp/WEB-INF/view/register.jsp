@@ -28,15 +28,15 @@
             }
         %>
 
-        <form method="post" action="/register">
+        <form method="post" action="${pageContext.request.contextPath}/register">
             <div class="mb-3">
-                <label for="username" class="form-label">아이디</label>
-                <input type="text" name="username" id="username" class="form-control" required />
+                <label for="name" class="form-label">아이디</label>
+                <input type="text" name="name" id="name" class="form-control" required />
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label">비밀번호</label>
-                <input type="password" name="password" id="password" class="form-control" required />
+                <label for="passWord" class="form-label">비밀번호</label>
+                <input type="password" name="passWord" id="passWord" class="form-control" required />
             </div>
 
             <div class="d-grid mt-4">
