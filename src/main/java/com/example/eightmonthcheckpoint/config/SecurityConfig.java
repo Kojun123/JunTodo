@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/customLogin").permitAll()
                         .loginProcessingUrl("/doLogin")
-                        .defaultSuccessUrl("/loginSuccess", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .csrf(csrf -> csrf.disable());
