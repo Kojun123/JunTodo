@@ -2,6 +2,7 @@ package com.example.eightmonthcheckpoint.controller;
 
 
 import com.example.eightmonthcheckpoint.domain.Todo;
+import com.example.eightmonthcheckpoint.dto.TodoResponseDto;
 import com.example.eightmonthcheckpoint.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,21 +19,22 @@ public class TodoController {
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
-
     @GetMapping
-    public ResponseEntity<List<Todo>> getFiltersTodos(@RequestParam(required = true) String filter) {
-        List<Todo> todos = new ArrayList<>();
+    public ResponseEntity<List<TodoResponseDto>> getFilteredTodos(@RequestParam String filter) {
+        List<Todo> todos = switch (filter) {
+            case "today" -> todoService.getTodayTodos();
+            case "completed" -> todoService.getCompletedTodos();
+            case "all" -> todoService.getAllTodo();
+            default -> new ArrayList<>();
+        };
 
-        if ("today".equals(filter)) {
-            todos = todoService.getTodayTodos();
-        } else if("completed".equals(filter)) {
-            todos = todoService.getCompletedTodos();
-        } else if("all".equals(filter)) {
-            todos = todoService.getAllTodo();
-        }
+        List<TodoResponseDto> dtoList = todos.stream()
+                .map(TodoResponseDto::new)
+                .toList();
 
-        return ResponseEntity.ok(todos);
+        return ResponseEntity.ok(dtoList);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {

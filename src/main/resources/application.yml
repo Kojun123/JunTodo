@@ -7,7 +7,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -27,5 +27,5 @@ spring:
       resolve-hidden: false
 logging:
   level:
-    root: DEBUG
-    org.springframework.security: DEBUG
+    root: INFO
+    org.springframework.security: INFO

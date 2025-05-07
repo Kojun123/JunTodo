@@ -1,8 +1,11 @@
 package com.example.eightmonthcheckpoint.service;
 
+import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.domain.Todo;
+import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.repository.TodoRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -48,6 +51,11 @@ public class TodoService {
     }
 
     public Todo addTodo(Todo todo) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
+
+        todo.setUser(user);
         todoRepository.save(todo);
         return todo;
     }
