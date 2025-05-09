@@ -126,7 +126,7 @@
                         todo.priority === "medium" ? "warning" : "success";
 
                     let createdDate = new Date(todo.createdAt);
-                    let formattedDate = `\${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
+                    let formattedDate = `등록일 : \${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
 
                     // 완료 여부 아이콘 변경
                     let completedIcon = todo.completed
@@ -142,7 +142,7 @@
 
                         if (diff === 0) dDayText = "🔥 오늘 마감";
                         else if (diff < 0) dDayText = `❗ 마감 \${-diff}일 지남`;
-                        else dDayText = `D-\${diff}`;
+                        else dDayText = `마감일 : D-\${diff}`;
                     }
 
                     let card = `
@@ -154,6 +154,7 @@
                                             \${completedIcon} \${todo.title}
                                         </h5>
                                         <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">\${dDayText}</small>
+                                        <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">작성자 : \${todo.username}</small>
                                         <p class="card-text">\${todo.description}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
