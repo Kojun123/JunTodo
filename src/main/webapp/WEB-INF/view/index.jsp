@@ -185,34 +185,26 @@
         const form = document.getElementById("editForm");  // 폼 요소 가져오기
         const formData = new FormData(form);  // FormData 객체 생성
         const todo = Object.fromEntries(formData);  // JSON 변환
-
-        // todo.forEach(item => {
-        //    if(item.completed) {
-        //        $("#id").val(item.id);
-        //
-        //
-        //    }
-        // });
+        const id = todo.id;
 
         console.log('save', todo);
 
-        axios.post("/api/todos", todo)
-            .then(response => {
-                loadTodos();  // 목록 새로고침
-                resetForm();  // 입력 폼 초기화
-                $("#editModal").modal("hide");
-            })
-            .catch(error => console.error("할 일 추가 실패:", error));
-    }
-
-    //  할 일 수정하기
-    function updateTodo(id, todo) {
-        axios.put(`/api/todos/${id}`, todo)
-            .then(response => {
-                loadTodos();
-                resetForm();
-            })
-            .catch(error => console.error("할 일 수정 실패:", error));
+        if (id && id.trim() !== "") {
+            axios.patch(`/api/todos/\${id}`, todo)
+                .then(response => {
+                    loadTodos(); // 목록 새로고침
+                    resetForm(); // 입력 폼 초기화
+                })
+                .catch(error => console.error("할 일 수정 실패:", error));
+        } else {
+            axios.post(`/api/todos`, todo)
+                .then(response => {
+                    loadTodos();  // 목록 새로고침
+                    resetForm();  // 입력 폼 초기화
+                    $("#editModal").modal("hide");
+                })
+                .catch(error => console.error("할 일 추가 실패:", error));
+        }
     }
 
     //  할 일 삭제하기

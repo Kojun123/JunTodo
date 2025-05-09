@@ -3,9 +3,12 @@ package com.example.eightmonthcheckpoint.controller;
 
 import com.example.eightmonthcheckpoint.domain.Todo;
 import com.example.eightmonthcheckpoint.dto.TodoResponseDto;
+import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -51,12 +54,18 @@ public class TodoController {
 
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        todoService.verifyTodoOwner(id, userId);
+
         Todo updatedTodo = todoService.updateTodo(id, todo);
         if (updatedTodo == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        return ResponseEntity.ok(updatedTodo);
+        return ResponseEntity.ok("수정완료");
     }
 
     @DeleteMapping("/{id}")

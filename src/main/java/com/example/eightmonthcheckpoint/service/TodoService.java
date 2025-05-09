@@ -4,6 +4,9 @@ import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.domain.Todo;
 import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.repository.TodoRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -77,4 +80,13 @@ public class TodoService {
         todoRepository.deleteById(id);
         return false;
     }
+
+    public void verifyTodoOwner(Long id, Long userId) {
+        Todo todos = this.getTodoById(id);
+
+        if (!todos.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("작성자가 아닙니다.");
+        }
+    }
+
 }
