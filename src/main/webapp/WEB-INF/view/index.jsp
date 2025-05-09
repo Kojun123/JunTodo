@@ -121,6 +121,7 @@
             .then(response => {
                 $("#todoTableBody").empty();
                 response.data.forEach(todo => {
+                    console.log('/get',todo);
                     let priorityColor = todo.priority === "high" ? "danger" :
                         todo.priority === "medium" ? "warning" : "success";
 
