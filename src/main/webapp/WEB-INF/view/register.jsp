@@ -45,7 +45,7 @@
         </form>
 
         <div class="text-center mt-3">
-            <a href="/login">이미 계정이 있으신가요? 로그인</a>
+            <a href="/customLogin">이미 계정이 있으신가요? 로그인</a>
         </div>
     </div>
 </div>

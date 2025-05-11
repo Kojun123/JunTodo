@@ -1,37 +1,48 @@
 
 package com.example.eightmonthcheckpoint.config;
 
+import com.example.eightmonthcheckpoint.security.CustomAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("시큐리티 설정 로딩됨");
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration configuration) throws Exception {
+        AuthenticationManager authenticationManager =  configuration.getAuthenticationManager();
+        CustomAuthenticationFilter customFilter = new CustomAuthenticationFilter(authenticationManager);
+        customFilter.setFilterProcessesUrl("/api/login");
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                                .requestMatchers("/customLogin", "/doLogin", "/css/**", "/js/**").permitAll()
+                                .requestMatchers( "/css/**", "/js/**", "/register","/customLogin").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/customLogin").permitAll()
-                        .loginProcessingUrl("/doLogin")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(((request, response, authException) ->
+                                response.sendRedirect("/customLogin"))
+                        )
                 )
+                .addFilter(customFilter)
+                .sessionManagement(session -> session.maximumSessions(1)) // 로그인 최대 세션 1
+//                .formLogin(form -> form
+//                        .loginPage("/customLogin").permitAll()
+//                        .loginProcessingUrl("/doLogin")
+//                        .defaultSuccessUrl("/", true)
+//                        .permitAll()
+//                )
                 .logout(logout -> logout
                         .logoutUrl("/logout") // 기본 로그아웃 url
                         .logoutSuccessUrl("/customLogin") // 성공시 이동할 url
@@ -52,5 +63,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }

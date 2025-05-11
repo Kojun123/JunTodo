@@ -18,6 +18,7 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>📋 TODO</h2>
+            <p id="currentUser" style="font-size: 0.9rem; color: #666;"></p>
         </div>
         <ul class="sidebar-menu">
             <%-- today, completed, all --%>
@@ -114,6 +115,11 @@
 
 <script>
     $(document).ready(function() {
+        const user = localStorage.getItem("username");
+        if (user) {
+            $("#currentUser").text(`👋 \${user}님 안녕하세요!`);
+        }
+
         loadTodos();
     });
 
