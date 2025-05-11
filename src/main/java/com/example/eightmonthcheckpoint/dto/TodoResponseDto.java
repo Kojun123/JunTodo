@@ -19,7 +19,10 @@ public class TodoResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public TodoResponseDto(Todo todo) {
+    // 수정 가능한지 여부(현재 로그인한 user와 to1do 작성 user의 아이디가 같으면 true)
+    private boolean editable;
+
+    public TodoResponseDto(Todo todo, Long loginUserId) {
         this.id = todo.getId();
         this.title = todo.getTitle();
         this.description = todo.getDescription();
@@ -27,6 +30,7 @@ public class TodoResponseDto {
         this.dueDate = todo.getDueDate();
         this.createdAt = todo.getCreatedAt();
         this.updatedAt = todo.getUpdatedAt();
+        this.editable = todo.getUser().getId().equals(loginUserId);
         this.username = todo.getUser().getName();
     }
 

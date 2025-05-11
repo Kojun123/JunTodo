@@ -31,8 +31,13 @@ public class TodoController {
             default -> new ArrayList<>();
         };
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+
         List<TodoResponseDto> dtoList = todos.stream()
-                .map(TodoResponseDto::new)
+                .map(todo -> new TodoResponseDto(todo, userId))
                 .toList();
 
         return ResponseEntity.ok(dtoList);

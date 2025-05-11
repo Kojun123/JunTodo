@@ -115,9 +115,9 @@
 
 <script>
     $(document).ready(function() {
-        const user = localStorage.getItem("username");
-        if (user) {
-            $("#currentUser").text(`👋 \${user}님 안녕하세요!`);
+        const currentUser = localStorage.getItem("username");
+        if (currentUser) {
+            $("#currentUser").text(`👋 \${currentUser}님 안녕하세요!`);
         }
 
         loadTodos();
@@ -135,7 +135,6 @@
                     let createdDate = new Date(todo.createdAt);
                     let formattedDate = `등록일 : \${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
 
-                    // 완료 여부 아이콘 변경
                     let completedIcon = todo.completed
                         ? `<span class="completed-icon">✔️</span>`
                         : `<span class="incomplete-icon">❌</span>`;
@@ -152,6 +151,14 @@
                         else dDayText = `마감일 : D-\${diff}`;
                     }
 
+                    let editableButton = '';
+                    if (todo.editable) {
+                        editableButton = `
+                                <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
+                        `
+                    }
+
                     let card = `
                             <div class="col-12 col-sm-6 col-md-4 mb-3">
                                 <div class="card \${completedClass}">
@@ -166,8 +173,7 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
                                             <div>
-                                                <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
-                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
+                                                \${editableButton}
                                             </div>
                                         </div>
                                     </div>
@@ -201,6 +207,7 @@
                 .then(response => {
                     loadTodos(); // 목록 새로고침
                     resetForm(); // 입력 폼 초기화
+                    $("#editModal").modal("hide");
                 })
                 .catch(error => console.error("할 일 수정 실패:", error));
         } else {
