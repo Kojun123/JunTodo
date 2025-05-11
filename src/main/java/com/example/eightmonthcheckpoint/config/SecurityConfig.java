@@ -32,6 +32,12 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/logout") // 기본 로그아웃 url
+                        .logoutSuccessUrl("/customLogin") // 성공시 이동할 url
+                        .invalidateHttpSession(true) // 세션무효화
+                        .deleteCookies("JSESSIONID") // 세션 쿠키 삭제
+                )
                 .csrf(csrf -> csrf.disable());
 
         return http.build();

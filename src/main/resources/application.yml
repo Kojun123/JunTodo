@@ -3,8 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/zxtodoxz?serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-#    password: kwonojou1120
-    password: 1120
+    password: kwonojou1120
   jpa:
     show-sql: true
     hibernate:

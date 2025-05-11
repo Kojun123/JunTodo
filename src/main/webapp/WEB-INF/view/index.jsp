@@ -32,6 +32,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" onclick="showCardView()">📋 카드형 보기</a></li>
                         <li><a class="dropdown-item" href="#" onclick="showCalendarView()">📅 캘린더 보기</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="fn_logout()">로그아웃</a></li>
                     </ul>
                 </div>
         </ul>
@@ -296,6 +297,14 @@
             renderCalendar();
             window.calendarRendered = true;
         }
+    }
+
+    function fn_logout() {
+        axios.post('/logout')
+            .then(() => {
+                window.location.href = '/customLogin';
+            })
+            .catch(err => {console.error('Logout failed : ', err)});
     }
 
 
