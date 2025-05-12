@@ -75,6 +75,12 @@ public class TodoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        todoService.verifyTodoOwner(id, userId);
+
         boolean isDel = todoService.deleteTodo(id);
         if (isDel) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.noContent().build();
