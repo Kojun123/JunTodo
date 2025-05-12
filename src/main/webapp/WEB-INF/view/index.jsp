@@ -33,6 +33,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" onclick="showCardView()">📋 카드형 보기</a></li>
                         <li><a class="dropdown-item" href="#" onclick="showCalendarView()">📅 캘린더 보기</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ui/settings">내 정보</a></li>
                         <li><a class="dropdown-item" href="#" onclick="fn_logout()">로그아웃</a></li>
                     </ul>
                 </div>
