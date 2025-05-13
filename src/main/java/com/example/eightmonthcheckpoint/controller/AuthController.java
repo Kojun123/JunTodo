@@ -38,7 +38,7 @@ public class AuthController {
     // 회원가입
     @PostMapping("/register")
     public String register(@ModelAttribute UserRequestDto dto, Model model) {
-        if (userService.existsByName(dto.getRole())) {
+        if (userService.existsByName(dto.getUserId())) {
             model.addAttribute("error", "이미 존재하는 사용자 입니다.");
             return "register";
         }

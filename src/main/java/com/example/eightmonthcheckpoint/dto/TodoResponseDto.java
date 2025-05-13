@@ -31,7 +31,7 @@ public class TodoResponseDto {
         this.createdAt = todo.getCreatedAt();
         this.updatedAt = todo.getUpdatedAt();
         this.editable = todo.getUser().getId().equals(loginUserId);
-        this.username = todo.getUser().getName();
+        this.username = todo.getUser().getNickname();
     }
 
 }

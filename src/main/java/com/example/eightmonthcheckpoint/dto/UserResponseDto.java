@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class UserResponseDto {
 
     private Long id;
-    private String name;
+    private String username;
     private String role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -23,16 +23,16 @@ public class UserResponseDto {
     @Builder
     public UserResponseDto(User user) {
         this.id = user.getId();
-        this.name = user.getName();
+        this.username = user.getNickname();
         this.role = user.getRole();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
 
     // json 요청 용
-    public UserResponseDto(Long id, String name, String role, String createdAt, String updatedAt) {
+    public UserResponseDto(Long id, String nickname, String role, String createdAt, String updatedAt) {
         this.id = id;
-        this.name = name;
+        this.username = nickname;
         this.role = role;
         this.createdAt = LocalDateTime.parse(createdAt);
         this.updatedAt = LocalDateTime.parse(updatedAt);

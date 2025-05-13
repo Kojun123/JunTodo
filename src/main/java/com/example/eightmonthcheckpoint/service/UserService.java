@@ -21,15 +21,15 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean existsByName(String name) {
-        return userRepository.findByName(name).isPresent();
+    public boolean existsByName(String userId) {
+        return userRepository.findByUserId(userId).isPresent();
     }
 
     public void register(UserRequestDto dto) {
-        String encodedPassword = passwordEncoder.encode(dto.getPassWord());
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
         com.example.eightmonthcheckpoint.domain.User user = com.example.eightmonthcheckpoint.domain.User.builder()
-                .name(dto.getName())
+                .userId(dto.getUserId())
                 .passWord(encodedPassword)
                 .role(dto.getRole() != null ? dto.getRole() : "USER")
                 .build();

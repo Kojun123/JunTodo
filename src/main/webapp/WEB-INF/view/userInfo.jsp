@@ -31,7 +31,7 @@
             <div class="d-flex justify-content-center align-items-center mt-5">
                 <div class="card profile-card p-4 text-center">
 <%--                    <img src="/img/default-profile.png" class="rounded-circle mx-auto mb-3" width="120" height="120" alt="Profile">--%>
-                    <h5 id="username">닉네임</h5>
+                    <h5 id="nickname">유저아이디</h5>
 <%--                    <p class="text-muted" id="useremail">이메일</p>--%>
                     <p>가입일: <span id="createdAt">-</span></p>
                     <p>권한: <span id="role">USER</span></p>
@@ -60,7 +60,7 @@
                 let createdAt = response.data.createdAt;
                 let formatCreatedAt = dayjs(createdAt).format('YYYY-MM-DD');
 
-                $('#username').text(responseData?.name);
+                $('#nickname').text(responseData?.name);
                 $('#createdAt').text(formatCreatedAt);
                 $('#role').text(responseData?.role);
             })

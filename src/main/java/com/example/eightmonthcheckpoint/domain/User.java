@@ -28,8 +28,9 @@ public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private String passWord;
+    private String userId;
+    private String nickname;
+    private String password;
     private String role;
 
     @CreatedDate
@@ -40,10 +41,11 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Builder
-    public User(Long id, String name, String role, String passWord,LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(Long id, String userId, String role, String nickname, String passWord,LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.name = name;
-        this.passWord = passWord;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.password = passWord;
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
