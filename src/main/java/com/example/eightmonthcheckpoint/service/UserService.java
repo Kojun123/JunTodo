@@ -1,5 +1,6 @@
 package com.example.eightmonthcheckpoint.service;
 
+import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.dto.UserRequestDto;
 import com.example.eightmonthcheckpoint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,10 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
 

@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class) // ✅ 자동 시간 업데이트를 위해 필요
+@EntityListeners(AuditingEntityListener.class) // 자동 시간 업데이트를 위해 필요
 public class User {
 
     @OneToMany(mappedBy = "user")
