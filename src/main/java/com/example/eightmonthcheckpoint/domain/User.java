@@ -7,8 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class) // 자동 시간 업데이트를 위해 필요
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @OneToMany(mappedBy = "user")
@@ -29,11 +32,20 @@ public class User {
     private String passWord;
     private String role;
 
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
     @Builder
-    public User(Long id, String name, String passWord, String role) {
+    public User(Long id, String name, String role, String passWord,LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.passWord = passWord;
         this.role = role;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

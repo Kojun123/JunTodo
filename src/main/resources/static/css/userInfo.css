@@ -1,0 +1,21 @@
+body {
+    background-color: #f8f9fa;
+}
+.sidebar {
+    background-color: white;
+    border-right: 1px solid #dee2e6;
+    min-height: 100vh;
+}
+.sidebar a {
+    color: #333;
+    font-weight: 500;
+}
+.sidebar a.active {
+    background-color: #0d6efd;
+    color: white !important;
+}
+.profile-card {
+    background-color: white;
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}

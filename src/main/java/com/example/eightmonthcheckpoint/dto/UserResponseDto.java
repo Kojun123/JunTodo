@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,13 +17,24 @@ public class UserResponseDto {
     private Long id;
     private String name;
     private String role;
-
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Builder
     public UserResponseDto(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.role = user.getRole();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 
+    // json 요청 용
+    public UserResponseDto(Long id, String name, String role, String createdAt, String updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.createdAt = LocalDateTime.parse(createdAt);
+        this.updatedAt = LocalDateTime.parse(updatedAt);
+    }
 }

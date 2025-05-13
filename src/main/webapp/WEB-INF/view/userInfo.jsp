@@ -10,44 +10,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/userInfo.css">
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script> <!-- date 파싱용 -->
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">내 계정 설정</h2>
 
-    <div class="card mb-4">
-        <div class="card-header">내 정보</div>
-        <div class="card-body">
-            <p><strong>아이디:</strong> <span id="username">불러오는 중...</span></p>
-            <p><strong>이메일:</strong> <span id="email">불러오는 중...</span></p>
-            <p><strong>가입일:</strong> <span id="createdAt">불러오는 중...</span></p>
-        </div>
-    </div>
+<div class="container-fluid">
+    <div class="row">
 
-    <div class="card mb-4">
-        <div class="card-header">비밀번호 변경</div>
-        <div class="card-body">
-            <form id="passwordForm">
-                <div class="mb-3">
-                    <label for="currentPassword" class="form-label">현재 비밀번호</label>
-                    <input type="password" class="form-control" id="currentPassword" required>
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar py-4">
+            <div class="list-group">
+                <a href="/ui/settings" class="list-group-item list-group-item-action active">내 정보</a>
+                <a href="/todos?filter=my" class="list-group-item list-group-item-action">내 할 일</a>
+                <a href="#" class="list-group-item list-group-item-action">비밀번호 변경</a>
+            </div>
+        </nav>
+
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-center align-items-center mt-5">
+                <div class="card profile-card p-4 text-center">
+<%--                    <img src="/img/default-profile.png" class="rounded-circle mx-auto mb-3" width="120" height="120" alt="Profile">--%>
+                    <h5 id="username">닉네임</h5>
+<%--                    <p class="text-muted" id="useremail">이메일</p>--%>
+                    <p>가입일: <span id="createdAt">-</span></p>
+                    <p>권한: <span id="role">USER</span></p>
+
+                    <a href="#" class="btn btn-outline-primary mt-3">내 정보 수정</a>
+                    <a href="#" class="btn btn-outline-secondary mt-2">비밀번호 변경</a>
+                    <a href="#" class="btn btn-danger mt-2">탈퇴하기</a>
                 </div>
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label">새 비밀번호</label>
-                    <input type="password" class="form-control" id="newPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary">비밀번호 변경</button>
-            </form>
-        </div>
+            </div>
+        </main>
     </div>
-
-    <div class="text-end">
-        <a href="/todos?filter=my" class="btn btn-outline-secondary">내 Todo 바로가기</a>
-    </div>
-
 </div>
-
 
 <script>
 
@@ -59,6 +55,14 @@
         axios.get(`/api/settings/userInfo`)
             .then(response => {
                 console.log('userInfo', response);
+                let responseData = response.data;
+
+                let createdAt = response.data.createdAt;
+                let formatCreatedAt = dayjs(createdAt).format('YYYY-MM-DD');
+
+                $('#username').text(responseData?.name);
+                $('#createdAt').text(formatCreatedAt);
+                $('#role').text(responseData?.role);
             })
     }
 
