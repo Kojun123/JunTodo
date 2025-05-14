@@ -2,15 +2,15 @@ package com.example.eightmonthcheckpoint.controller;
 
 
 import com.example.eightmonthcheckpoint.domain.User;
+import com.example.eightmonthcheckpoint.dto.ApiResponse;
+import com.example.eightmonthcheckpoint.dto.UserNameChangeRequestDto;
 import com.example.eightmonthcheckpoint.dto.UserResponseDto;
 import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.service.UserService;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/settings")
@@ -23,8 +23,9 @@ public class UserSettingController {
     }
 
 
+    // 유저정보 불러오기
     @GetMapping("/userInfo")
-    public ResponseEntity<UserResponseDto> getUserById(Authentication authentication) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.getUser();
 
@@ -32,7 +33,29 @@ public class UserSettingController {
                 .user(user)
                 .build();
 
-        return ResponseEntity.ok(userResponseDto);
+        ApiResponse<UserResponseDto> response = new ApiResponse<>(true, "유저정보 불러오기 성공", userResponseDto);
+        return ResponseEntity.ok(response);
+    }
+
+    // 유저명 변경
+    @PatchMapping("/changeNickName")
+    public ResponseEntity<ApiResponse<Void>> changeNickName(@RequestBody UserNameChangeRequestDto userNameChangeRequestDto,
+                                                      Authentication authentication) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
+
+        String newUserName = userNameChangeRequestDto.getNewUsername();
+
+        if (StringUtils.isNotEmpty(user.getNickname()) && !user.getNickname().equals(newUserName)) {
+            userService.existByNickName(newUserName);
+        }
+
+        user.setNickname(newUserName);
+        userService.save(user);
+
+        ApiResponse<Void> response = new ApiResponse<>(true, "유저명이 변경되었습니다.", null);
+        return ResponseEntity.ok(response);
     }
 
 

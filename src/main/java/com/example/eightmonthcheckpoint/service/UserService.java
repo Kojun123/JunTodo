@@ -2,6 +2,7 @@ package com.example.eightmonthcheckpoint.service;
 
 import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.dto.UserRequestDto;
+import com.example.eightmonthcheckpoint.exception.DuplicateNicknameException;
 import com.example.eightmonthcheckpoint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +42,16 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    // 유저명 중복체크
+    public void existByNickName(String userName) {
+        if (userRepository.existsByNickname(userName)) {
+            throw new DuplicateNicknameException();
+        }
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
 
 }
