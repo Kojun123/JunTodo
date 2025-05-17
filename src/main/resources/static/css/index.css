@@ -13,43 +13,49 @@ body {
     width: 100%;
 }
 
-/*  사이드바 스타일 */
 .sidebar {
-    width: 250px;
-    background-color: #ffe4e1;
-    padding: 20px;
+    width: 230px;
     height: 100vh;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffe5e0;
+    padding: 2rem 1.5rem;
+    position: fixed;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
 }
 
-.sidebar-header {
-    font-size: 1.5rem;
+.sidebar-header h4 {
+    color: #333;
+}
+
+.sidebar-menu .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    transition: background-color 0.2s ease;
+}
+.sidebar-menu .nav-link i {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.sidebar-menu .nav-link:hover {
+    background-color: #ffd5d0;
+    color: #000;
+    border-radius: 8px;
+}
+
+.sidebar-menu .nav-link.active {
+    background-color: #ffbfb5;
+    color: #000;
     font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
 }
 
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-}
 
-.sidebar-menu li {
-    padding: 10px;
-}
-
-.sidebar-menu li a {
-    text-decoration: none;
-    color: black;
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background 0.3s;
-}
-
-.sidebar-menu li a:hover {
-    background-color: #ffb6c1;
-    color: white;
+.sidebar-menu i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+    vertical-align: middle;
 }
 
 /*  메인 콘텐츠 스타일 */

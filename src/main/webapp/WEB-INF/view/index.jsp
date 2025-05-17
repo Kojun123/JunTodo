@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <html>
 <head>
     <title>투두 리스트</title>
@@ -6,41 +7,34 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--confirm 꾸며줌 -->
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
     <!-- full calender부분 -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+<jsp:include page="sidebar.jsp" />
 
 </head>
 <body>
-<%--<div id='calendar'></div>--%>
+
 <div class="wrapper">
-    <!-- 왼쪽 사이드바 -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>📋 TODO</h2>
-            <p id="currentUser" style="font-size: 0.9rem; color: #666;"></p>
-        </div>
-        <ul class="sidebar-menu">
-            <%-- today, completed, all --%>
-            <li class="active"><a href="#" onclick="loadTodos('today')">📅 오늘</a></li>
-<%--            <li><a href="#">다음</a></li>--%>
-            <li><a href="#" onclick="loadTodos('completed')">✔️ 완료된 할 일</a></li>
-            <li><a href="#" onclick="loadTodos('all')">🔄 전체 보기</a></li>
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                        ⚙️ 설정
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" onclick="showCardView()">📋 카드형 보기</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="showCalendarView()">📅 캘린더 보기</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/ui/settings">내 정보</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="fn_logout()">로그아웃</a></li>
-                    </ul>
-                </div>
-        </ul>
-    </aside>
 
     <div id="cardView">
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h3 class="fw-bold mb-0" id="todoList" name="todoList">할 일 목록</h3>
+
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    보기
+                </button>
+                <ul class="dropdown-menu">
+                    <%-- today, completed, all --%>
+                    <li><a class="dropdown-item filter-option active" onclick="loadTodos('today')" data-filter="today">📅 오늘 할 일</a></li>
+                    <li><a class="dropdown-item filter-option" onclick="loadTodos('completed')" data-filter="all">🔄 전체 할 일</a></li>
+                    <li><a class="dropdown-item filter-option" onclick="loadTodos('all')" data-filter="completed">✔️ 완료한 할 일</a></li>
+                </ul>
+            </div>
+        </div>
         <div id="todoTableBody" class="row">
             <!--할 일 리스트-->
         </div>
@@ -130,6 +124,14 @@
                 $("#todoTableBody").empty();
                 response.data.forEach(todo => {
                     console.log('/get',todo);
+
+                    if (filterType == "all") {
+                        $('#todoList').text('할일 목록 - 전체');
+                    } else if (filterType == "completed") {
+                        $('#todoList').text('할일 목록 - 완료');
+                    } else if (filterType == "today") {
+                        $('#todoList').text('할일 목록 - 오늘');
+                    }
                     let priorityColor = todo.priority === "high" ? "danger" :
                         todo.priority === "medium" ? "warning" : "success";
 
@@ -224,9 +226,23 @@
 
     //  할 일 삭제하기
     function deleteTodo(id) {
-        axios.delete(`/api/todos/\${id}`)
-            .then(response => loadTodos())
-            .catch(error => console.error("할 일 삭제 실패:", error));
+        Swal.fire({
+            title: '정말 삭제하시겠습니까?',
+            text: '되돌릴 수 없습니다!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#aaa',
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/todos/\${id}`)
+                    .then(response => loadTodos())
+                    .catch(error => console.error("할 일 삭제 실패:", error));
+            }
+        });
+
     }
 
     //  완료 상태 변경 (체크박스 클릭 시)
