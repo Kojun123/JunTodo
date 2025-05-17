@@ -29,10 +29,18 @@ public class UserService {
     public void register(UserRequestDto dto) {
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
+
+        String nickname = "사용자" + (int)(Math.random() * 100000);
+
+        while (userRepository.existsByNickname(nickname)) {
+            nickname = "사용자" + (int)(Math.random() * 100000);
+        }
+
         com.example.eightmonthcheckpoint.domain.User user = com.example.eightmonthcheckpoint.domain.User.builder()
                 .userId(dto.getUserId())
                 .passWord(encodedPassword)
                 .role(dto.getRole() != null ? dto.getRole() : "USER")
+                .nickname(nickname)
                 .build();
 
         userRepository.save(user);
