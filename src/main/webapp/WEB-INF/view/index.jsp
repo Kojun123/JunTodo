@@ -29,9 +29,9 @@
                 </button>
                 <ul class="dropdown-menu">
                     <%-- today, completed, all --%>
-                    <li><a class="dropdown-item filter-option active" onclick="loadTodos('today')" data-filter="today">📅 오늘 할 일</a></li>
-                    <li><a class="dropdown-item filter-option" onclick="loadTodos('completed')" data-filter="all">🔄 전체 할 일</a></li>
-                    <li><a class="dropdown-item filter-option" onclick="loadTodos('all')" data-filter="completed">✔️ 완료한 할 일</a></li>
+                    <li><a class="dropdown-item filter-option" onclick="loadTodos('today')" data-filter="today">📅 오늘 할 일</a></li>
+                    <li><a class="dropdown-item filter-option" onclick="loadTodos('completed')" data-filter="completed">✔️ 완료한 할 일</a></li>
+                    <li><a class="dropdown-item filter-option" onclick="loadTodos('all')" data-filter="all">🔄 전체 할 일</a></li>
                 </ul>
             </div>
         </div>
@@ -119,19 +119,23 @@
     });
 
     function loadTodos(filterType="all") {
+
         axios.get(`/api/todos?filter=\${filterType}`)
             .then(response => {
                 $("#todoTableBody").empty();
+                if (filterType.trim().toLowerCase() == 'all') {
+                    console.log('!!')
+                    $('#todoList').text('할일 목록 - 전체');
+                } else if (filterType.trim().toLowerCase() == 'completed') {
+                    $('#todoList').text('할일 목록 - 완료');
+                } else if (filterType.trim().toLowerCase() == 'today') {
+                    $('#todoList').text('할일 목록 - 오늘');
+                }
                 response.data.forEach(todo => {
                     console.log('/get',todo);
 
-                    if (filterType == "all") {
-                        $('#todoList').text('할일 목록 - 전체');
-                    } else if (filterType == "completed") {
-                        $('#todoList').text('할일 목록 - 완료');
-                    } else if (filterType == "today") {
-                        $('#todoList').text('할일 목록 - 오늘');
-                    }
+
+
                     let priorityColor = todo.priority === "high" ? "danger" :
                         todo.priority === "medium" ? "warning" : "success";
 

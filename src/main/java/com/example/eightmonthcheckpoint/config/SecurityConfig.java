@@ -27,8 +27,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers( "/css/**", "/js/**", "/register","/customLogin").permitAll()
-                                .anyRequest().authenticated()
+//                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
+                        .requestMatchers( "/css/**", "/js/**", "/register","/customLogin").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(((request, response, authException) ->

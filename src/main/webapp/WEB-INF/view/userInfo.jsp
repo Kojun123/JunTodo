@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--confirm 꾸며줌 -->
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/sidebar.css">
@@ -40,7 +41,8 @@
     <div class="main-content">
         <div class="d-flex justify-content-center align-items-center mt-5">
             <div class="card profile-card p-4 text-center">
-                <h5 id="username">유저명 : </h5>
+                <img src="https://i.pravatar.cc/100?u=6" class="rounded-circle mx-auto mb-3" width="100" height="100">
+                <strong><h5 id="username">유저명 : </h5></strong>
                 <p>아이디: <span id="userId">-</span></p>
                 <p>가입일: <span id="createdAt">-</span></p>
                 <p>권한: <span id="role">권한 : </span></p>

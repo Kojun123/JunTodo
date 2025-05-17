@@ -1,5 +1,5 @@
 body {
-    background-color: #f8f9fa;
+    background-color: #f4f6f8;
 }
 .sidebar {
     background-color: white;
@@ -15,7 +15,10 @@ body {
     color: white !important;
 }
 .profile-card {
-    background-color: white;
-    border: none;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    background-color: #ffffff;
+    padding: 2rem;
 }
+
+
