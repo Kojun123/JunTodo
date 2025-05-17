@@ -51,7 +51,6 @@ public class UserSettingController {
             @Parameter(description = "새로운 닉네임(유저명)", required = true)
             @RequestBody UserNameChangeRequestDto userNameChangeRequestDto,
                                                       Authentication authentication) {
-
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.getUser();
 

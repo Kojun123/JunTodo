@@ -53,13 +53,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         request.getSession(true)
                 .setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/json");
+        CustomUserDetails userDetails = (CustomUserDetails) authResult.getPrincipal();
+        String nickname = userDetails.getUser().getNickname();
 
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> result = new HashMap<>();
-        result.put("message", "Login Success");
-        response.getWriter().write(mapper.writeValueAsString(result));
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", "로그인 성공");
+        result.put("nickname", nickname);
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(result));
     }
 
 
@@ -67,6 +73,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Authentication ");
+        response.setContentType("application/json;charset=UTF-8");
+
+        Map<String, Object> error = new HashMap<>();
+        error.put("success", false);
+        error.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(error));
     }
 }

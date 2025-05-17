@@ -110,9 +110,10 @@
 
 <script>
     $(document).ready(function() {
-        const currentUser = localStorage.getItem("username");
+        const currentUser = localStorage.getItem("nickname");
+
         if (currentUser) {
-            $("#currentUser").text(`👋 \${currentUser}님 안녕하세요!`);
+            $("#currentUser").html(`<strong>\${currentUser}님</strong>`);
         }
 
         loadTodos();
@@ -122,7 +123,10 @@
 
         axios.get(`/api/todos?filter=\${filterType}`)
             .then(response => {
+                console.log('~~~', response);
+
                 $("#todoTableBody").empty();
+
                 if (filterType.trim().toLowerCase() == 'all') {
                     console.log('!!')
                     $('#todoList').text('할일 목록 - 전체');
@@ -131,7 +135,8 @@
                 } else if (filterType.trim().toLowerCase() == 'today') {
                     $('#todoList').text('할일 목록 - 오늘');
                 }
-                response.data.forEach(todo => {
+
+                response.data.data.forEach(todo => {
                     console.log('/get',todo);
 
 
@@ -271,8 +276,8 @@
         axios.get(`/api/todos/\${id}`)
             .then(response => {
                 resetForm();
-                console.log('open modal', response.data);
-                const data = response.data;
+                console.log('open modal', response.data.data);
+                const data = response.data.data;
                 $("#id").val(data.id);
                 $("#title").val(data.title);
                 $("#description").val(data.description);

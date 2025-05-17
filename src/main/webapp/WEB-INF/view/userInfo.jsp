@@ -10,6 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--confirm 꾸며줌 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- alert 꾸며줌 -->
+
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/sidebar.css">
@@ -102,9 +104,15 @@
             newUsername: newUserNm
         })
             .then(response => {
+                console.log('~',response);
                 const data = response.data;
                 if (data.success) {
-                    alert(data.message);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '완료!',
+                        text: '유저명이 변경되었습니다.'
+                    });
+
                     const modal = bootstrap.Modal.getInstance(document.getElementById('editUserNmModal'));
                     modal.hide();
                     getUserInfo();
@@ -113,8 +121,9 @@
                 }
             })
             .catch(error => {
-                if (error.response?.data?.message) {
-                    $('#userNmValidError').text(error.response.data.message);
+                console.log('?', error);
+                if (error.response?.data?.data?.message) {
+                    $('#userNmValidError').text(error.response.data.data?.message);
                 } else {
                     $('#userNmValidError').text("알 수 없는 오류가 발생했습니다.");
                 }

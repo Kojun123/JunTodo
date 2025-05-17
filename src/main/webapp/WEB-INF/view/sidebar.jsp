@@ -8,7 +8,7 @@
            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <!-- https://i.pravatar.cc/32 -> 랜덤 유저 프로필 api 6주면 고정 -->
             <img src="https://i.pravatar.cc/32" alt="profile" class="rounded-circle me-2" width="32" height="32">
-            <strong>6님</strong>
+            <p id="currentUser"><strong>닉네임 님</strong></p>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><a class="dropdown-item" href="/ui/settings">내 정보</a></li>
@@ -35,3 +35,4 @@
     <%--        <li><a href="#"><span class="dot dot-green"></span> 새로 온 브랜드</a></li>--%>
     <%--    </ul>--%>
 </aside>
+

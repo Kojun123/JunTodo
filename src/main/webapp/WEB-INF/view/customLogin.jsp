@@ -57,7 +57,7 @@
 
         axios.post("/api/login", { username: username, password: password },{withCredentials : true})
             .then(res => {
-                localStorage.setItem("username", username);
+                localStorage.setItem("nickname", res.data.nickname);
                 window.location.href = "/";
             })
             .catch(err => {
