@@ -86,5 +86,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public boolean checkCurrentPassword(Long userId, String inputPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        return passwordEncoder.matches(inputPassword, user.getPassword());
+    }
+
 
 }

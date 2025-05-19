@@ -1,10 +1,7 @@
 package com.example.eightmonthcheckpoint.controller;
 
 
-import com.example.eightmonthcheckpoint.dto.ApiResponse;
-import com.example.eightmonthcheckpoint.dto.PasswordChangeRequestDto;
-import com.example.eightmonthcheckpoint.dto.UserNameChangeRequestDto;
-import com.example.eightmonthcheckpoint.dto.UserResponseDto;
+import com.example.eightmonthcheckpoint.dto.*;
 import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,6 +68,22 @@ public class UserSettingController {
 
         UserResponseDto dto = userService.changeNickname(userId, newUserName);
         return ResponseEntity.ok(new ApiResponse<>(true, "유저명이 변경되었습니다.", dto));
+    }
+
+    @Operation(
+            summary = "현재 비밀번호 검사",
+            description = "현재 비밀번호와 일치하는지 검사합니다."
+    )
+    @PostMapping("/checkPassword")
+    public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkPassword(
+            @RequestBody PasswordCheckRequestDto dto,
+            Authentication authentication
+    ) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        boolean isValid = userService.checkCurrentPassword(userId, dto.getPassword());
+        return ResponseEntity.ok(new ApiResponse<>(true, "비밀번호 확인", Map.of("valid", isValid)));
     }
 
     @Operation(
