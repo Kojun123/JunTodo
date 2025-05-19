@@ -1,18 +1,19 @@
 package com.example.eightmonthcheckpoint.controller;
 
 
-import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.dto.ApiResponse;
+import com.example.eightmonthcheckpoint.dto.PasswordChangeRequestDto;
 import com.example.eightmonthcheckpoint.dto.UserNameChangeRequestDto;
 import com.example.eightmonthcheckpoint.dto.UserResponseDto;
 import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.service.UserService;
-import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/settings")
@@ -32,14 +33,26 @@ public class UserSettingController {
     )
     public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        User user = userDetails.getUser();
+        Long userId = userDetails.getUser().getId();
 
-        UserResponseDto userResponseDto = UserResponseDto.builder()
-                .user(user)
-                .build();
+        UserResponseDto dto = userService.getUserInfo(userId);
 
-        ApiResponse<UserResponseDto> response = new ApiResponse<>(true, "유저정보 불러오기 성공", userResponseDto);
+        ApiResponse<UserResponseDto> response = new ApiResponse<>(true, "유저정보 불러오기 성공", dto);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "유저명 변경 중복 확인",
+            description = "변경할 유저명의 중복확인 진행"
+    )
+    @GetMapping("/checkNickname")
+    public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkNickname(
+            @Parameter(description = "새로운 닉네임(유저명)", required = true)
+            @RequestParam String nickname) {
+        boolean available = userService.isNicknameAvailable(nickname);
+        Map<String, Boolean> result = Map.of("available", available);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "닉네임 중복체크", result));
     }
 
     @Operation(
@@ -47,24 +60,34 @@ public class UserSettingController {
             description = "현재 로그인한 사용자의 닉네임을 새 닉네임으로 변경"
     )
     @PatchMapping("/changeNickName")
-    public ResponseEntity<ApiResponse<Void>> changeNickName(
+    public ResponseEntity<ApiResponse<UserResponseDto>> changeNickName(
             @Parameter(description = "새로운 닉네임(유저명)", required = true)
             @RequestBody UserNameChangeRequestDto userNameChangeRequestDto,
                                                       Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        User user = userDetails.getUser();
+        Long userId = userDetails.getUser().getId();
 
         String newUserName = userNameChangeRequestDto.getNewUsername();
 
-        if (StringUtils.isNotEmpty(user.getNickname()) && !user.getNickname().equals(newUserName)) {
-            userService.existByNickName(newUserName);
-        }
+        UserResponseDto dto = userService.changeNickname(userId, newUserName);
+        return ResponseEntity.ok(new ApiResponse<>(true, "유저명이 변경되었습니다.", dto));
+    }
 
-        user.setNickname(newUserName);
-        userService.save(user);
+    @Operation(
+            summary = "비밀번호 변경",
+            description = "현재 비밀번호 확인 후 새 비밀번호로 변경합니다."
+    )
+    @PatchMapping("/changePassword")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @RequestBody PasswordChangeRequestDto dto,
+            Authentication authentication
+    ) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUser().getId();
 
-        ApiResponse<Void> response = new ApiResponse<>(true, "유저명이 변경되었습니다.", null);
-        return ResponseEntity.ok(response);
+        userService.changePassword(userId, dto);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "비밀번호가 변경되었습니다.", null));
     }
 
 

@@ -9,69 +9,71 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--confirm 꾸며줌 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- alert 꾸며줌 -->
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/userInfo.css">
-
-    <style>
-        body {
-            margin: 0;
-            background-color: #f9f9f9;
-        }
-
-        .wrapper {
-            display: flex;
-        }
-
-        .main-content {
-            margin-left: 250px; /* 사이드바 너비 */
-            padding: 2rem;
-            width: 100%;
-        }
-    </style>
 </head>
 
 <body>
-
 <div class="wrapper">
     <jsp:include page="sidebar.jsp"/>
 
     <div class="main-content">
         <div class="d-flex justify-content-center align-items-center mt-5">
             <div class="card profile-card p-4 text-center">
-                <img src="https://i.pravatar.cc/100?u=6" class="rounded-circle mx-auto mb-3" width="100" height="100">
-                <strong><h5 id="username">유저명 : </h5></strong>
+                <div class="position-relative d-inline-block">
+                    <img src="https://i.pravatar.cc/100?u=6" class="rounded-circle mb-3" width="100" height="100">
+                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-light border border-secondary rounded-circle">
+                        <i class="bi bi-camera"></i>
+                    </span>
+                </div>
+                <strong><h5 id="nickname">유저명 : </h5></strong>
                 <p>아이디: <span id="userId">-</span></p>
                 <p>가입일: <span id="createdAt">-</span></p>
                 <p>권한: <span id="role">권한 : </span></p>
 
                 <a href="#" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#editUserNmModal">유저명 변경</a>
-                <a href="#" class="btn btn-outline-secondary mt-2">비밀번호 변경</a>
+                <a href="#" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#changePwModal">비밀번호 변경</a>
                 <a href="#" class="btn btn-danger mt-2">탈퇴하기</a>
             </div>
         </div>
     </div>
 </div>
 
+<!-- 유저명 변경 모달 -->
 <div class="modal fade" id="editUserNmModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title">유저명 변경</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="nicknameForm">
-                    <div class="mb-3">
-                        <label for="newUserNm" class="form-label">새 유저명</label>
-                        <input type="text" class="form-control" id="newUserNm" name="newUserNm" required>
-                        <div id="userNmValidError" class="form-text text-danger"></div>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th>현재 유저명</th>
+                            <td><span id="currentNickname">(불러오는중)</span></td>
+                        </tr>
+                        <tr>
+                            <th>변경할 유저명</th>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="text" class="form-control" id="newUserNm" name="newUserNm" required style="flex: 1;">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="checkNicknameDuplication()">중복확인</button>
+                                </div>
+                                <div id="userNmValidError" class="form-text text-danger"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-end">
+                        <button type="button" id="nickNameChangeConfirmBtn" class="btn btn-primary" onclick="changeNickName()" disabled>완료</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     </div>
-                    <button type="button" class="btn btn-primary w-100" onclick="changeNickName()">변경</button>
                 </form>
             </div>
         </div>
@@ -86,15 +88,51 @@
     function getUserInfo() {
         axios.get(`/api/settings/userInfo`)
             .then(response => {
+                console.log('getuserinfo',response);
                 const responseData = response.data.data;
                 const createdAt = dayjs(responseData.createdAt).format('YYYY-MM-DD');
 
-                $('#username').text("유저명 : " + responseData?.username);
-                $('#userId').text(responseData?.id);
+                $('#nickname').text("유저명 : " + responseData?.nickname);
+                $('#userId').text(responseData?.userId);
                 $('#createdAt').text(createdAt);
                 $('#role').text(responseData?.role);
-            })
+                $('#currentNickname').text(responseData?.nickname);
+            });
     }
+
+    let isNicknameChecked = false;
+
+    function checkNicknameDuplication() {
+        const nickname = $('#newUserNm').val();
+        if (!nickname) return;
+
+        axios.get(`/api/settings/checkNickname`, { params: { nickname } })
+            .then(res => {
+                console.log('checkNickname',res);
+                if (res.data.data.available) {
+                    Swal.fire('사용 가능', '해당 닉네임은 사용 가능합니다!', 'success');
+                    $('#userNmValidError').text('');
+                    isNicknameChecked = true;
+                    $('#nickNameChangeConfirmBtn').prop('disabled', false);
+                } else {
+                    $('#userNmValidError').text('이미 사용 중인 닉네임입니다.');
+                    isNicknameChecked = false;
+                    $('#nickNameChangeConfirmBtn').prop('disabled', true);
+                }
+            })
+            .catch(() => {
+                $('#userNmValidError').text('중복 확인 중 오류 발생');
+                isNicknameChecked = false;
+                $('#nickNameChangeConfirmBtn').prop('disabled', true);
+            });
+    }
+
+    // 닉네임 입력 내용이 바뀌면 다시 중복확인 초기화
+    $('#newUserNm').on('input', () => {
+        isNicknameChecked = false;
+        $('#confirmBtn').prop('disabled', true);
+    });
+
 
     function changeNickName() {
         let newUserNm = $('#newUserNm').val();
@@ -104,7 +142,7 @@
             newUsername: newUserNm
         })
             .then(response => {
-                console.log('~',response);
+                console.log('~~',response);
                 const data = response.data;
                 if (data.success) {
                     Swal.fire({
@@ -112,6 +150,13 @@
                         title: '완료!',
                         text: '유저명이 변경되었습니다.'
                     });
+
+                    localStorage.setItem('nickname', data.data.nickname);
+                    const currentUser = localStorage.getItem("nickname");
+
+                    if (currentUser) {
+                        $("#currentUser").html(`<strong>\${currentUser}님</strong>`);
+                    }
 
                     const modal = bootstrap.Modal.getInstance(document.getElementById('editUserNmModal'));
                     modal.hide();
@@ -121,7 +166,6 @@
                 }
             })
             .catch(error => {
-                console.log('?', error);
                 if (error.response?.data?.data?.message) {
                     $('#userNmValidError').text(error.response.data.data?.message);
                 } else {

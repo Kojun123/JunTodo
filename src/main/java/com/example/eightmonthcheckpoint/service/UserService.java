@@ -1,8 +1,12 @@
 package com.example.eightmonthcheckpoint.service;
 
 import com.example.eightmonthcheckpoint.domain.User;
+import com.example.eightmonthcheckpoint.dto.PasswordChangeRequestDto;
 import com.example.eightmonthcheckpoint.dto.UserRequestDto;
+import com.example.eightmonthcheckpoint.dto.UserResponseDto;
 import com.example.eightmonthcheckpoint.exception.DuplicateNicknameException;
+import com.example.eightmonthcheckpoint.exception.InvalidPasswordException;
+import com.example.eightmonthcheckpoint.exception.UserNotFoundException;
 import com.example.eightmonthcheckpoint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,18 +50,39 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserResponseDto getUserInfo(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        return UserResponseDto.from(user);
     }
 
-    // 유저명 중복체크
-    public void existByNickName(String userName) {
-        if (userRepository.existsByNickname(userName)) {
+    public boolean isNicknameAvailable(String nickname) {
+        return !userRepository.existsByNickname(nickname);
+    }
+
+    // 유저명 변경
+    public UserResponseDto changeNickname(Long userId, String newNickname) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (userRepository.existsByNickname(newNickname)) { // 유저명 중복체크
             throw new DuplicateNicknameException();
         }
+        user.setNickname(newNickname);
+        userRepository.save(user);
+
+        return UserResponseDto.from(user);
     }
 
-    public void save(User user) {
+    public void changePassword(Long id, PasswordChangeRequestDto dto) {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        String newEncoded = passwordEncoder.encode(dto.getNewPassword());
+        user.setPassword(newEncoded);
         userRepository.save(user);
     }
 

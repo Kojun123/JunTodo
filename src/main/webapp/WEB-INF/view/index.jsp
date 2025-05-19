@@ -110,12 +110,6 @@
 
 <script>
     $(document).ready(function() {
-        const currentUser = localStorage.getItem("nickname");
-
-        if (currentUser) {
-            $("#currentUser").html(`<strong>\${currentUser}님</strong>`);
-        }
-
         loadTodos();
     });
 
@@ -338,13 +332,6 @@
         }
     }
 
-    function fn_logout() {
-        axios.post('/logout')
-            .then(() => {
-                window.location.href = '/customLogin';
-            })
-            .catch(err => {console.error('Logout failed : ', err)});
-    }
 
 
 </script>
