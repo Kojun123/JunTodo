@@ -36,7 +36,7 @@
 
                 <a href="#" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#editUserNmModal">유저명 변경</a>
                 <a href="#" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#editPasswordChangeModal">비밀번호 변경</a>
-                <a href="#" class="btn btn-danger mt-2">탈퇴하기</a>
+                <a href="#" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#userDeleteModal">탈퇴하기</a>
             </div>
         </div>
     </div>
@@ -115,7 +115,41 @@
                         </tbody>
                     </table>
                     <div class="text-end">
-                        <button type="button" id="passwordChangeBtn" class="btn btn-primary" onclick="changePassword()" disabled>완료</button>
+                        <button type="button" id="passwordChangeBtn" class="btn btn-primary" onclick="changePassword('editPasswordChangeModal')" disabled>완료</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 회원탈퇴 모달 -->
+<div class="modal fade" id="userDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title">회원탈퇴</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userDeleteForm">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th>현재 비밀번호</th>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="text" class="form-control" id="userDelete_currentPassword" name="currentPassword" required style="flex: 1;">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="checkPassword('userDeleteModal')">확인</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="text-end">
+                        <button type="button" id="userDelete_passwordChangeBtn" class="btn btn-primary" onclick="deleteUser()" disabled>탈퇴하기</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     </div>
                 </form>
@@ -197,7 +231,7 @@
         let newUserNm = $('#newUserNm').val();
         $('#userNmValidError').text('');
 
-        axios.patch(`/api/settings/changeNickName`, {
+        axios.patch(`/api/settings/nickname`, {
             newUsername: newUserNm
         })
             .then(response => {
@@ -235,8 +269,13 @@
 
     // 현재 비밀번호 검사
     let isPasswordChecked = false;
-    function checkPassword() {
-        const password = $('#currentPassword').val();
+    function checkPassword(modalId) {
+        let password = '';
+        if (modalId == 'editPasswordChangeModal') {
+            password = $('#currentPassword').val();
+        } else if (modalId == 'userDeleteModal') {
+            password = $('#userDelete_currentPassword').val();
+        }
         if (!password) return;
 
         axios.post('/api/settings/checkPassword', { password })
@@ -246,17 +285,29 @@
                     Swal.fire('확인 완료', '비밀번호가 일치합니다.', 'success');
                     $('#passwordValidError').text('');
                     isPasswordChecked = true;
-                    $('#passwordChangeBtn').prop('disabled', false);
+                    if (modalId == 'editPasswordChangeModal') {
+                        $('#passwordChangeBtn').prop('disabled', false);
+                    } else if (modalId == 'userDeleteModal') {
+                        $('#userDelete_passwordChangeBtn').prop('disabled', false);
+                    }
                 } else {
                     Swal.fire('확인 완료', '비밀번호가 일치하지 않습니다.', 'error');
                     isPasswordChecked = false;
-                    $('#passwordChangeBtn').prop('disabled', true);
+                    if (modalId == 'editPasswordChangeModal') {
+                        $('#passwordChangeBtn').prop('disabled', true);
+                    } else if (modalId == 'userDeleteModal') {
+                        $('#userDelete_passwordChangeBtn').prop('disabled', true);
+                    }
                 }
             })
             .catch(() => {
                 $('#passwordValidError').text('비밀번호 확인 중 오류 발생');
                 isPasswordChecked = false;
-                $('#passwordChangeBtn').prop('disabled', true);
+                if (modalId == 'editPasswordChangeModal') {
+                    $('#passwordChangeBtn').prop('disabled', true);
+                } else if (modalId == 'userDeleteModal') {
+                    $('#userDelete_passwordChangeBtn').prop('disabled', true);
+                }
             });
     }
 
@@ -265,7 +316,7 @@
         let newPassword = $('#newPassword').val();
         let currentPassword = $('#currentPassword').val();
 
-        axios.patch(`/api/settings/changePassword`, {
+        axios.patch(`/api/settings/password`, {
             currentPassword: currentPassword
             ,newPassword : newPassword
         })
@@ -291,6 +342,31 @@
                 }
             });
     }
+
+    function deleteUser() {
+        Swal.fire({
+            title: '정말 탈퇴하시겠습니까?',
+            text: "되돌릴 수 없습니다!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '탈퇴',
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete('/api/settings/user')
+                    .then(res => {
+                        Swal.fire('탈퇴 완료', '이용해주셔서 감사합니다.', 'success')
+                            .then(() => {
+                                window.location.href = '/customLogin'; // 또는 메인페이지
+                            });
+                    })
+                    .catch(error => {
+                        Swal.fire('오류', '탈퇴 중 문제가 발생했습니다.', 'error');
+                    });
+            }
+        });
+    }
+
 
 </script>
 

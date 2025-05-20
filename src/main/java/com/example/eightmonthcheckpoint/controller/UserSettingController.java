@@ -56,7 +56,7 @@ public class UserSettingController {
             summary = "유저명 변경",
             description = "현재 로그인한 사용자의 닉네임을 새 닉네임으로 변경"
     )
-    @PatchMapping("/changeNickName")
+    @PatchMapping("/nickname")
     public ResponseEntity<ApiResponse<UserResponseDto>> changeNickName(
             @Parameter(description = "새로운 닉네임(유저명)", required = true)
             @RequestBody UserNameChangeRequestDto userNameChangeRequestDto,
@@ -90,7 +90,7 @@ public class UserSettingController {
             summary = "비밀번호 변경",
             description = "현재 비밀번호 확인 후 새 비밀번호로 변경합니다."
     )
-    @PatchMapping("/changePassword")
+    @PatchMapping("/password")
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @RequestBody PasswordChangeRequestDto dto,
             Authentication authentication
@@ -101,6 +101,20 @@ public class UserSettingController {
         userService.changePassword(userId, dto);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "비밀번호가 변경되었습니다.", null));
+    }
+
+    @Operation(
+            summary = "회원 탈퇴"
+            ,description = "비밀번호로 검증하고 계정을 삭제합니다."
+    )
+    @DeleteMapping("/user")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        userService.deleteUser(userId);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "회원 탈퇴 완료", null));
     }
 
 

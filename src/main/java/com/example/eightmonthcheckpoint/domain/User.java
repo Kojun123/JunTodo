@@ -22,7 +22,8 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    @OneToMany(mappedBy = "user")
+    //우선은 cascade를 줘서 회원탈퇴시 투두도 전부 삭제하는거로 진행. 만약 회원복구와 같은 기능이 추가된다면 탈퇴 상태로 바꾸는 del_yn같은 컬럼을 추가하면 될듯.
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Todo> todos = new ArrayList<>();
 
