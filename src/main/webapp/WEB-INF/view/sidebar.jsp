@@ -1,7 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-<aside class="todo-sidebar">
+<aside class="todo-sidebar collapsed" id="sidebar">
+
+    <button id="sidebarToggle" class="btn btn-sm btn-light ms-2 mt-2">
+        <i class="bi bi-chevron-left"></i>
+    </button>
 
     <div class="dropdown profile-box">
         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
@@ -18,7 +22,7 @@
     </div>
 
     <ul class="sidebar-menu mt-4">
-        <li><a href="/"><i class="bi bi-calendar-day me-2 text-danger"></i> DashBoard</a></li>
+        <li><a href="/"><i class="bi bi-calendar-day me-2 text-danger"></i><span>DashBoard</span></a></li>
         <li><a href="#"><i class="bi bi-search me-2"></i> 검색</a></li>
         <li><a href="#"><i class="bi bi-inbox me-2"></i> 관리함</a></li>
         <li><a href="#"><i class="bi bi-calendar2-week me-2"></i> 다음</a></li>
@@ -50,5 +54,23 @@
             })
             .catch(err => {console.error('Logout failed : ', err)});
     }
+
+
+    //사이드바 토글
+    document.getElementById("sidebarToggle").addEventListener("click", () => {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("collapsed");
+
+        localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed"));
+    });
+
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const sidebar = document.getElementById("sidebar");
+        const collapsed = localStorage.getItem("sidebarCollapsed") === "true";
+        if (collapsed) {
+            sidebar.classList.add("collapsed");
+        }
+    });
 </script>
 
