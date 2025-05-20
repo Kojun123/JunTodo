@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-<aside class="todo-sidebar collapsed" id="sidebar">
+<aside class="todo-sidebar" id="sidebar">
 
     <button id="sidebarToggle" class="btn btn-sm btn-light ms-2 mt-2">
         <i class="bi bi-chevron-left"></i>
@@ -64,13 +64,17 @@
         localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed"));
     });
 
+    $(document).ready(function () {
+        $(function () {
+            const sidebar = document.getElementById("sidebar");
+            const collapsed = localStorage.getItem("sidebarCollapsed") === "true";
+            if (collapsed) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+            }
+        });
 
-    window.addEventListener("DOMContentLoaded", () => {
-        const sidebar = document.getElementById("sidebar");
-        const collapsed = localStorage.getItem("sidebarCollapsed") === "true";
-        if (collapsed) {
-            sidebar.classList.add("collapsed");
-        }
     });
 </script>
 
