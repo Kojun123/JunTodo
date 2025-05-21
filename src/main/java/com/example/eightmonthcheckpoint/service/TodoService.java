@@ -1,11 +1,11 @@
 package com.example.eightmonthcheckpoint.service;
 
+import com.example.eightmonthcheckpoint.domain.Enum.SearchFilter;
+import com.example.eightmonthcheckpoint.dto.TodoResponseDto;
 import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.domain.Todo;
 import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.repository.TodoRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Service
 public class TodoService {
@@ -88,5 +91,19 @@ public class TodoService {
             throw new AccessDeniedException("작성자가 아닙니다.");
         }
     }
+
+    public List<TodoResponseDto> searchTodo(SearchFilter filter,String keyword, Long currentUserId) {
+
+        return (switch (filter) {
+            case TITLE -> todoRepository.findBytitleContaining(keyword);
+            case DESCRIPTION -> todoRepository.findBydescriptionContaining(keyword);
+            case USERNAME -> todoRepository.findByUser_nicknameContaining(keyword );
+            default -> throw new IllegalArgumentException("올바르지 않은 필터입니다");
+        }
+        ).stream().map(todo -> new TodoResponseDto(todo, currentUserId))
+                .collect(Collectors.toList());
+    }
+
+
 
 }

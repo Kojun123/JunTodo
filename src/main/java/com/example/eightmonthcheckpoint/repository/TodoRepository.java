@@ -1,6 +1,8 @@
 package com.example.eightmonthcheckpoint.repository;
 
+import com.example.eightmonthcheckpoint.domain.Enum.SearchFilter;
 import com.example.eightmonthcheckpoint.domain.Todo;
+import com.example.eightmonthcheckpoint.dto.TodoResponseDto;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +22,10 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     @EntityGraph(attributePaths = {"user"})
     Optional<Todo> findById(Long id);
+
+    List<Todo> findBytitleContaining(String keyword);
+
+    List<Todo> findBydescriptionContaining(String keyword);
+
+    List<Todo> findByUser_nicknameContaining(String keyword);
 }

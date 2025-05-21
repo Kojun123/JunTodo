@@ -19,9 +19,31 @@
 
 <div class="wrapper">
 
+    <!-- 검색 버튼 -->
+    <div class="top-search-btn" onclick="openSearchModal()">
+        <i class="bi bi-search"></i>
+    </div>
+
+    <!-- 검색 모달 오버레이 -->
+    <div id="searchModal" class="search-modal d-none">
+        <div class="search-modal-backdrop" onclick="closeSearchModal()"></div>
+        <div class="search-modal-box">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="searchInput" class="searchInput" placeholder="검색어를 입력하세요..." autofocus>
+            <select id="searchFilter" class="search-filter">
+                <option value="title">제목</option>
+                <option value="description">설명</option>
+                <option value="username">작성자</option>
+            </select>
+            <button class="btn-close" onclick="closeSearchModal()"></button>
+        </div>
+    </div>
+
     <div id="cardView">
         <div class="d-flex justify-content-between align-items-center my-4">
             <h3 class="fw-bold mb-0" id="todoList" name="todoList">할 일 목록</h3>
+
+
 
             <div class="dropdown">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -35,6 +57,7 @@
                 </ul>
             </div>
         </div>
+
         <div id="todoTableBody" class="row">
             <!--할 일 리스트-->
         </div>
@@ -45,6 +68,8 @@
         <div id="calendar"></div>
     </div>
 </div>
+
+
 
 <button class="floating-add-btn" onclick="fn_modalOpen()">
     +
@@ -132,8 +157,6 @@
 
                 response.data.data.forEach(todo => {
                     console.log('/get',todo);
-
-
 
                     let priorityColor = todo.priority === "high" ? "danger" :
                         todo.priority === "medium" ? "warning" : "success";
@@ -331,6 +354,47 @@
             window.calendarRendered = true;
         }
     }
+
+    //검색모달
+    function openSearchModal() {
+        document.getElementById("searchModal").classList.remove("d-none");
+        document.getElementById("searchInput").focus();
+    }
+
+    function closeSearchModal() {
+        document.getElementById("searchModal").classList.add("d-none");
+        document.getElementById("searchInput").value = "";
+    }
+
+    // 검색 실행
+    document.getElementById("searchInput").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            const keyword = document.getElementById("searchInput").value.trim();
+            const filter = document.getElementById("searchFilter").value;
+
+            if (keyword === "") return;
+
+            axios.get(`/api/todos/search`, {
+                params: {
+                    keyword: keyword,
+                    filter: filter
+                }
+            })
+                .then(res => {
+                    closeSearchModal();
+                    console.log("검색 결과:", res.data);
+                })
+                .catch(err => {
+                    console.error("검색 실패:", err);
+                });
+        }
+    });
+
+    // ESC 키로 닫기
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeSearchModal();
+    });
+
 
 
 

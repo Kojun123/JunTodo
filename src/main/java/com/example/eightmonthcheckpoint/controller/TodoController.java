@@ -1,6 +1,7 @@
 package com.example.eightmonthcheckpoint.controller;
 
 
+import com.example.eightmonthcheckpoint.domain.Enum.SearchFilter;
 import com.example.eightmonthcheckpoint.domain.Todo;
 import com.example.eightmonthcheckpoint.dto.ApiResponse;
 import com.example.eightmonthcheckpoint.dto.TodoResponseDto;
@@ -139,6 +140,34 @@ public class TodoController {
         if (isDel) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    @Operation(
+            summary = "TODO 검색",
+            description = "화면에서 조건을 받아와서 todo 데이터를 검색합니다."
+    )
+    public ResponseEntity<ApiResponse<List<TodoResponseDto>>> searchTodo(
+            @Parameter(description = "검색할 todo 키워드", example = "운동하기")
+            @RequestParam String keyword,
+            @Parameter(description = "검색할 todo의 필터", example = "제목, 내용, 작성일 등")
+            @RequestParam String filter) {
+
+        SearchFilter searchFilter = SearchFilter.from(filter);
+
+        if (searchFilter == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false, "유효하지 않은 검색 필터입니다.",null));
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        List<TodoResponseDto> todoResponseDtos = todoService.searchTodo(searchFilter,keyword, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,"검색 완료", todoResponseDtos));
+    }
+
+
 
 
 }
