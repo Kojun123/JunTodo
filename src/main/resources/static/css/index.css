@@ -227,54 +227,84 @@ body {
     color: #333;
 }
 
-/* 검색 모달 전체 영역 */
+.search-modal-box {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    width: 520px;
+    max-width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    border: 1px solid #dee2e6;
+    z-index: 1062;
+}
+
+.search-icon {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-right: 6px;
+}
+
+.search-modal-box input[type="text"] {
+    flex: 1;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 10px 12px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.search-modal-box input[type="text"]:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 2px rgba(13,110,253,.25);
+}
+
+.search-filter {
+    font-size: 0.95rem;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    background-color: #f8f9fa;
+    color: #495057;
+    outline: none;
+    appearance: none;
+    height: 40px;
+}
+
+.search-modal-box .btn-close {
+    background-color: transparent;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    opacity: 0.6;
+}
+
+.search-modal-box .btn-close:hover {
+    background-color: #f1f3f5;
+    opacity: 1;
+}
+
 .search-modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 1055;
+    z-index: 1061;
 }
 
 .search-modal-backdrop {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1061;
+    backdrop-filter: blur(2px);
 }
 
-.search-modal-box {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    padding: 16px 24px;
-    border-radius: 12px;
-    width: 480px;
-    max-width: 90%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-.search-input {
-    border: none;
-    outline: none;
-    flex: 1;
-    font-size: 18px;
-}
-
-.search-icon {
-    font-size: 20px;
-    color: #888;
-}
-
-.search-filter {
-    font-size: 14px;
-    padding: 4px 6px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: #f8f9fa;
-}
 
 
 

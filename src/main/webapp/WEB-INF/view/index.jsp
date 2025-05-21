@@ -29,7 +29,7 @@
         <div class="search-modal-backdrop" onclick="closeSearchModal()"></div>
         <div class="search-modal-box">
             <i class="bi bi-search search-icon"></i>
-            <input type="text" id="searchInput" class="searchInput" placeholder="검색어를 입력하세요..." autofocus>
+            <input type="text" id="searchInput" class="form-control" placeholder="검색어를 입력하세요..." autofocus>
             <select id="searchFilter" class="search-filter">
                 <option value="title">제목</option>
                 <option value="description">설명</option>
