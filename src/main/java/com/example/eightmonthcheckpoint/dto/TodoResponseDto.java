@@ -15,6 +15,7 @@ public class TodoResponseDto {
     private String description;
     private String priority;
     private String username;
+    private String completed;
     private LocalDate dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -28,6 +29,7 @@ public class TodoResponseDto {
         this.description = todo.getDescription();
         this.priority = todo.getPriority().name(); // enum이면 .name() 사용
         this.username = todo.getUser().getNickname();
+        this.completed = todo.getCompleted();
         this.dueDate = todo.getDueDate();
         this.editable = todo.getUser().getId().equals(NowLoginUserId);
         this.createdAt = todo.getCreatedAt();

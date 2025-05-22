@@ -28,15 +28,19 @@
     <div id="searchModal" class="search-modal d-none">
         <div class="search-modal-backdrop" onclick="closeSearchModal()"></div>
         <div class="search-modal-box">
-            <i class="bi bi-search search-icon"></i>
-            <input type="text" id="searchInput" class="form-control" placeholder="검색어를 입력하세요..." autofocus>
             <select id="searchFilter" class="search-filter">
                 <option value="title">제목</option>
                 <option value="description">설명</option>
                 <option value="username">작성자</option>
             </select>
-            <button class="btn-close" onclick="closeSearchModal()"></button>
+
+            <input type="text" id="searchInput" class="search-input" placeholder="검색어를 입력하세요..." autofocus>
+
+            <button id="searchBtn" class="search-btn">
+                <i class="bi bi-search"></i>
+            </button>
         </div>
+
     </div>
 
     <div id="cardView">
@@ -138,11 +142,74 @@
         loadTodos();
     });
 
+    //card형 만드는 함수
+    function createTodoCard(todo) {
+        const priorityColor = todo.priority === "high" ? "danger" :
+            todo.priority === "medium" ? "warning" : "success";
+
+        const createdDate = new Date(todo.createdAt);
+        const formattedDate = `등록일 : \${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
+
+        const completedIcon = todo.completed
+            ? `<span class="completed-icon">✔️</span>`
+            : `<span class="incomplete-icon">❌</span>`;
+
+        const completedClass = todo.completed ? "completed-card" : "";
+
+        let dDayText = "";
+        if (todo.dueDate) {
+            const due = new Date(todo.dueDate);
+            const today = new Date();
+            const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+
+            if (diff === 0) dDayText = "🔥 오늘 마감";
+            else if (diff < 0) dDayText = `❗ 마감 \${-diff}일 지남`;
+            else dDayText = `마감일 : D-\${diff}`;
+        }
+
+        const editableButton = todo.editable ? `
+        <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
+        <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
+    ` : "";
+
+            return `
+            <div class="col-12 col-sm-6 col-md-4 mb-3">
+                <div class="card \${completedClass}">
+                    <div class="card-body position-relative">
+                        <small class="created-date position-absolute top-0 end-0 me-2 mt-2 text-muted">\${formattedDate}</small>
+                        <h5 class="card-title text-\${priorityColor} mb-1" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
+                            \${completedIcon} \${todo.title}
+                        </h5>
+                        <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">\${dDayText}</small>
+                        <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">작성자 : \${todo.username || '익명'}</small>
+                        <p class="card-text">\${todo.description}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
+                            <div>
+                                \${editableButton}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    //card형으로 만든 data받아서 렌더링
+    function renderTodoList(data) {
+        $("#todoTableBody").empty();
+
+        data.forEach(todo => {
+            const card = createTodoCard(todo);
+            $("#todoTableBody").append(card);
+        });
+    }
+
     function loadTodos(filterType="all") {
 
         axios.get(`/api/todos?filter=\${filterType}`)
-            .then(response => {
-                console.log('~~~', response);
+            .then(res => {
+                console.log('loadTodos', res);
 
                 $("#todoTableBody").empty();
 
@@ -155,63 +222,7 @@
                     $('#todoList').text('할일 목록 - 오늘');
                 }
 
-                response.data.data.forEach(todo => {
-                    console.log('/get',todo);
-
-                    let priorityColor = todo.priority === "high" ? "danger" :
-                        todo.priority === "medium" ? "warning" : "success";
-
-                    let createdDate = new Date(todo.createdAt);
-                    let formattedDate = `등록일 : \${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
-
-                    let completedIcon = todo.completed
-                        ? `<span class="completed-icon">✔️</span>`
-                        : `<span class="incomplete-icon">❌</span>`;
-
-                    let completedClass = todo.completed ? "completed-card" : "";
-                    let dDayText = "";
-                    if (todo.dueDate) {
-                        const due = new Date(todo.dueDate);
-                        const today = new Date();
-                        const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
-
-                        if (diff === 0) dDayText = "🔥 오늘 마감";
-                        else if (diff < 0) dDayText = `❗ 마감 \${-diff}일 지남`;
-                        else dDayText = `마감일 : D-\${diff}`;
-                    }
-
-                    let editableButton = '';
-                    if (todo.editable) {
-                        editableButton = `
-                                <button class="btn btn-sm btn-outline-secondary" onclick="openEditModal(\${todo.id}, '\${todo.title}', '\${todo.description}', '\${todo.priority}', \${todo.completed})">✏ 수정</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="deleteTodo(\${todo.id})">🗑 삭제</button>
-                        `
-                    }
-
-                    let card = `
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <div class="card \${completedClass}">
-                                   <div class="card-body position-relative">
-                                        <small class="created-date position-absolute top-0 end-0 me-2 mt-2 text-muted">\${formattedDate}</small>
-                                        <h5 class="card-title text-\${priorityColor} mb-1" onclick="toggleComplete(\${todo.id}, \${todo.completed})">
-                                            \${completedIcon} \${todo.title}
-                                        </h5>
-                                        <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">\${dDayText}</small>
-                                        <small class="d-block text-end text-muted mb-2" style="font-size: 0.85rem;">작성자 : \${todo.username}</small>
-                                        <p class="card-text">\${todo.description}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="badge bg-\${priorityColor}">\${todo.priority}</span>
-                                            <div>
-                                                \${editableButton}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            `;
-
-                    $("#todoTableBody").append(card);
-                });
+                renderTodoList(res.data.data);
             })
             .catch(error => console.error("할 일 목록 불러오기 실패:", error));
     }
@@ -273,102 +284,100 @@
 
     //  완료 상태 변경 (체크박스 클릭 시)
     function toggleComplete(id, currentStatus) {
-        axios.patch(`/api/todos/${id}`, { completed: !currentStatus })
-            .then(response => loadTodos())  // 변경 후 목록 새로고침
-            .catch(error => console.error("완료 상태 변경 실패:", error));
-    }
-
-
-    // 수정&추가 모달 폼초기화
-    function resetForm() {
-        $("#id").val("");          // 숨겨진 ID 필드 초기화
-        $("#title").val("");           // 제목 입력 필드 초기화
-        $("#description").val("");     // 설명 입력 필드 초기화
-        $("#priority").val("LOW");     // 우선순위를 기본값("low")으로 설정
-        $("#completed").prop("checked", false); // 완료 체크박스 초기화
-    }
-
-    // 수정모달오픈
-    function openEditModal(id) {
-        axios.get(`/api/todos/\${id}`)
-            .then(response => {
-                resetForm();
-                console.log('open modal', response.data.data);
-                const data = response.data.data;
-                $("#id").val(data.id);
-                $("#title").val(data.title);
-                $("#description").val(data.description);
-                $("#priority").val(data.priority);
-                $("#completed").prop("checked", data.completed);
-                $("#dueDate").val(data.dueDate || "");
-                $('#editModal').modal('show');
-            }).catch(error => console.error("할 일 불러오기 실패 : ", error));
-    }
-
-    function fn_modalOpen() {
-        resetForm();
-        $('#editModal').modal('show');
-    }
-
-    // full calender 초기화
-    function renderCalendar() {
-        const calendarEl = document.getElementById("calendar");
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: "dayGridMonth",
-            locale: "ko",
-            events: function(fetchInfo, successCallback, failureCallback) {
-                axios.get("/api/todos")
-                    .then(res => {
-                        const events = res.data
-                            .filter(todo => todo.dueDate)
-                            .map(todo => ({
-                                id: todo.id,
-                                title: todo.title,
-                                start: todo.dueDate,
-                                allDay: true
-                            }));
-                        successCallback(events);
-                    })
-                    .catch(err => failureCallback(err));
-            },
-            eventClick: function(info) {
-                alert("할 일: " + info.event.title);
-            }
-        });
-
-        calendar.render();
-    }
-
-    //탭전환
-    function showCardView() {
-        $("#cardView").removeClass("d-none");
-        $("#calendarView").addClass("d-none");
-    }
-
-    function showCalendarView() {
-        $("#cardView").addClass("d-none");
-        $("#calendarView").removeClass("d-none");
-
-        if (!window.calendarRendered) {
-            renderCalendar();
-            window.calendarRendered = true;
+            axios.patch(`/api/todos/${id}`, { completed: !currentStatus })
+                .then(response => loadTodos())  // 변경 후 목록 새로고침
+                .catch(error => console.error("완료 상태 변경 실패:", error));
         }
-    }
 
-    //검색모달
-    function openSearchModal() {
-        document.getElementById("searchModal").classList.remove("d-none");
-        document.getElementById("searchInput").focus();
-    }
 
-    function closeSearchModal() {
-        document.getElementById("searchModal").classList.add("d-none");
-        document.getElementById("searchInput").value = "";
-    }
+        // 수정&추가 모달 폼초기화
+        function resetForm() {
+            $("#id").val("");          // 숨겨진 ID 필드 초기화
+            $("#title").val("");           // 제목 입력 필드 초기화
+            $("#description").val("");     // 설명 입력 필드 초기화
+            $("#priority").val("LOW");     // 우선순위를 기본값("low")으로 설정
+            $("#completed").prop("checked", false); // 완료 체크박스 초기화
+        }
 
-    // 검색 실행
-    document.getElementById("searchInput").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
+        // 수정모달오픈
+        function openEditModal(id) {
+            axios.get(`/api/todos/\${id}`)
+                .then(response => {
+                    resetForm();
+                    console.log('open modal', response.data.data);
+                    const data = response.data.data;
+                    $("#id").val(data.id);
+                    $("#title").val(data.title);
+                    $("#description").val(data.description);
+                    $("#priority").val(data.priority);
+                    $("#completed").prop("checked", data.completed);
+                    $("#dueDate").val(data.dueDate || "");
+                    $('#editModal').modal('show');
+                }).catch(error => console.error("할 일 불러오기 실패 : ", error));
+        }
+
+        function fn_modalOpen() {
+            resetForm();
+            $('#editModal').modal('show');
+        }
+
+        // full calender 초기화
+        function renderCalendar() {
+            const calendarEl = document.getElementById("calendar");
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: "dayGridMonth",
+                locale: "ko",
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    axios.get("/api/todos")
+                        .then(res => {
+                            const events = res.data
+                                .filter(todo => todo.dueDate)
+                                .map(todo => ({
+                                    id: todo.id,
+                                    title: todo.title,
+                                    start: todo.dueDate,
+                                    allDay: true
+                                }));
+                            successCallback(events);
+                        })
+                        .catch(err => failureCallback(err));
+                },
+                eventClick: function (info) {
+                    alert("할 일: " + info.event.title);
+                }
+            });
+
+            calendar.render();
+        }
+
+        //탭전환
+        function showCardView() {
+            $("#cardView").removeClass("d-none");
+            $("#calendarView").addClass("d-none");
+        }
+
+        function showCalendarView() {
+            $("#cardView").addClass("d-none");
+            $("#calendarView").removeClass("d-none");
+
+            if (!window.calendarRendered) {
+                renderCalendar();
+                window.calendarRendered = true;
+            }
+        }
+
+        //검색모달
+        function openSearchModal() {
+            document.getElementById("searchModal").classList.remove("d-none");
+            document.getElementById("searchInput").focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById("searchModal").classList.add("d-none");
+            document.getElementById("searchInput").value = "";
+        }
+
+        function searchTodo() {
             const keyword = document.getElementById("searchInput").value.trim();
             const filter = document.getElementById("searchFilter").value;
 
@@ -383,17 +392,24 @@
                 .then(res => {
                     closeSearchModal();
                     console.log("검색 결과:", res.data);
+                    renderTodoList(res.data.data);
                 })
                 .catch(err => {
                     console.error("검색 실패:", err);
                 });
         }
-    });
 
-    // ESC 키로 닫기
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") closeSearchModal();
-    });
+        // 검색 실행(돋보기 아이콘 눌렀을 경우 && 엔터 눌렀을 경우)
+        document.getElementById("searchBtn").addEventListener("click", searchTodo);
+        document.getElementById("searchInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                searchTodo();
+            }
+        });
+
+
+
+
 
 
 

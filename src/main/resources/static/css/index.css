@@ -1,4 +1,5 @@
-/*  전체 페이지 스타일 */
+
+/* 전체 페이지 스타일 */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
@@ -7,7 +8,7 @@ body {
     margin: 0;
 }
 
-/*  레이아웃 조정 */
+/* 레이아웃 조정 */
 .wrapper {
     display: flex;
     width: 100%;
@@ -34,6 +35,7 @@ body {
     padding: 0.75rem 1rem;
     transition: background-color 0.2s ease;
 }
+
 .sidebar-menu .nav-link i {
     font-size: 1.2rem;
     color: #555;
@@ -51,20 +53,19 @@ body {
     font-weight: bold;
 }
 
-
 .sidebar-menu i {
     margin-right: 8px;
     font-size: 1.2rem;
     vertical-align: middle;
 }
 
-/*  메인 콘텐츠 스타일 */
+/* 메인 콘텐츠 스타일 */
 .content {
     flex-grow: 1;
     padding: 30px;
 }
 
-/*  상단 헤더 */
+/* 상단 헤더 */
 .content-header {
     display: flex;
     justify-content: space-between;
@@ -88,10 +89,24 @@ body {
 }
 
 .completed-card {
-    opacity: 0.6;
+    background-color: #e6ffe6;
+    opacity: 0.8;
     text-decoration: line-through;
 }
 
+.completed-icon {
+    color: green;
+    font-size: 1.2em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.incomplete-icon {
+    color: gray;
+    font-size: 1.2em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
 
 .list-group-item {
     background: white;
@@ -104,7 +119,6 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/*  체크박스와 텍스트 정렬 */
 .list-group-item div {
     display: flex;
     align-items: center;
@@ -114,7 +128,6 @@ body {
     margin-right: 10px;
 }
 
-/* 버튼 스타일 */
 .btn-sm {
     padding: 5px 10px;
     font-size: 0.9rem;
@@ -139,41 +152,17 @@ body {
     background-color: #0056b3;
 }
 
-/* 할 일 체크 스타일 */
-.completed-card {
-    background-color: #e6ffe6; /* 완료된 항목은 연한 초록색 배경 */
-    opacity: 0.8;
-    text-decoration: line-through;
-}
-
-.completed-icon {
-    color: green;
-    font-size: 1.2em;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-
-.incomplete-icon {
-    color: gray;
-    font-size: 1.2em;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-
-/*  모달 전체 디자인 개선 */
 .modal-content {
     border-radius: 12px;
     border: none;
 }
 
-/*  입력 필드 디자인 */
 .form-control, .form-select {
     border-radius: 8px;
     padding: 10px;
     font-size: 1rem;
 }
 
-/*  버튼 스타일 */
 .btn-close-white {
     filter: invert(1);
 }
@@ -181,12 +170,13 @@ body {
 .created-date {
     font-size: 0.9rem;
     font-weight: bold;
-    color: #6c757d; /* Bootstrap text-muted 색상 */
+    color: #6c757d;
 }
 
 #calendarView {
     padding: 10px;
 }
+
 #calendar {
     max-width: 1000px;
     margin: 0 auto;
@@ -195,9 +185,10 @@ body {
 #todoTableBody {
     margin-top: 1rem;
 }
+
 #todoTableBody > .col-md-4 {
     flex: 0 0 auto;
-    width: 32%; /* 또는 Bootstrap 그리드 기준에 맞춰 33.333% */
+    width: 32%;
 }
 
 #cardView {
@@ -227,70 +218,7 @@ body {
     color: #333;
 }
 
-.search-modal-box {
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    padding: 14px 20px;
-    border-radius: 14px;
-    width: 520px;
-    max-width: 90%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    border: 1px solid #dee2e6;
-    z-index: 1062;
-}
-
-.search-icon {
-    font-size: 1.1rem;
-    color: #6c757d;
-    margin-right: 6px;
-}
-
-.search-modal-box input[type="text"] {
-    flex: 1;
-    font-size: 1rem;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    padding: 10px 12px;
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.search-modal-box input[type="text"]:focus {
-    border-color: #86b7fe;
-    box-shadow: 0 0 0 2px rgba(13,110,253,.25);
-}
-
-.search-filter {
-    font-size: 0.95rem;
-    padding: 9px 12px;
-    border-radius: 8px;
-    border: 1px solid #ced4da;
-    background-color: #f8f9fa;
-    color: #495057;
-    outline: none;
-    appearance: none;
-    height: 40px;
-}
-
-.search-modal-box .btn-close {
-    background-color: transparent;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-    opacity: 0.6;
-}
-
-.search-modal-box .btn-close:hover {
-    background-color: #f1f3f5;
-    opacity: 1;
-}
-
+/* 검색 모달 */
 .search-modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -305,6 +233,59 @@ body {
     backdrop-filter: blur(2px);
 }
 
+.search-modal-box {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    width: 520px;
+    max-width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    border: 1px solid #ddd;
+    z-index: 1062;
+}
 
+.search-filter {
+    font-size: 0.95rem;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    color: #333;
+    height: 40px;
+    flex-shrink: 0;
+}
 
+.search-input {
+    flex: 1;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px 12px;
+    outline: none;
+}
 
+.search-btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    height: 40px;
+}
+
+.search-btn i {
+    font-size: 1.1rem;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
