@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class TodoController {
 
     @GetMapping
     @Operation(
-            summary = "TODO 목록 조회",
+            summary = "TODO 필터 목록 조회",
             description = "필터 조건(today, completed, all)에 따라  TODO 목록을 조회"
     )
     public ResponseEntity<ApiResponse<List<TodoResponseDto>>> getFilteredTodos(
@@ -54,6 +55,26 @@ public class TodoController {
 
         ApiResponse<List<TodoResponseDto>> response = new ApiResponse<>(true, "Todo 카드형 데이터 조회 성공", dtoList);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/by-date")
+    @Operation(
+            summary = "TODO 기간 지정 목록 조회",
+            description = "카드형 화면에서 필터 조건(YEAR, MONTH) 에 따라 TODO 목록을 조회 EXAMPLE : 2025, 05"
+    )
+    public ResponseEntity<ApiResponse<List<TodoResponseDto>>> getTodosByYearMonth(
+            @Parameter(description = "년도") @RequestParam String year,
+            @Parameter(description = "월") @RequestParam String month
+    ) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        List<TodoResponseDto> todosByYearMonth = todoService.getTodosByYearMonth(year, month, userId);
+
+
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Todo 캘린더형 데이터 리스트 조회 성공", todosByYearMonth));
     }
 
 
@@ -168,6 +189,8 @@ public class TodoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,"검색 완료", todoResponseDtos));
     }
+
+
 
 
 

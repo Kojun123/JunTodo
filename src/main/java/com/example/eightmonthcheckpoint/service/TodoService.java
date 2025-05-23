@@ -48,6 +48,15 @@ public class TodoService {
         return todayTodos;
     }
 
+    public List<TodoResponseDto> getTodosByYearMonth(String year, String month, Long userId) {
+        int y = Integer.parseInt(year);
+        int m = Integer.parseInt(month);
+
+        List<Todo> byCreatedAtYearMonth = todoRepository.findByCreatedAtYearMonth(y, m);
+        return byCreatedAtYearMonth.stream()
+                .map(todo -> new TodoResponseDto(todo, userId)).collect(Collectors.toList());
+    }
+
     public List<Todo> getCompletedTodos() {
         return todoRepository.findByCompletedOn();
     }
@@ -103,6 +112,8 @@ public class TodoService {
         ).stream().map(todo -> new TodoResponseDto(todo, currentUserId))
                 .collect(Collectors.toList());
     }
+
+
 
 
 
