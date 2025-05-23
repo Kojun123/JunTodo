@@ -25,7 +25,7 @@
         <li><a href="/"><i class="bi bi-calendar-day me-2 text-danger"></i><span>DashBoard</span></a></li>
 <%--        <li><a href="#"><i class="bi bi-search me-2"></i> 검색</a></li>--%>
 <%--        <li><a href="#"><i class="bi bi-inbox me-2"></i> 관리함</a></li>--%>
-        <li><a href="#"><i class="bi bi-calendar2-week me-2"></i> 캘린더뷰</a></li>
+        <li><a href="/ui/todoCalendar"><i class="bi bi-calendar2-week me-2"></i> 캘린더뷰</a></li>
         <li><a href="#"><i class="bi bi-sliders2 me-2"></i> 필터 & 라벨</a></li>
     </ul>
 
