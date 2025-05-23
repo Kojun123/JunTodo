@@ -1,15 +1,14 @@
 package com.example.eightmonthcheckpoint.controller;
 
-import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.dto.UserRequestDto;
 import com.example.eightmonthcheckpoint.repository.UserRepository;
 import com.example.eightmonthcheckpoint.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.apache.juli.logging.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class AuthController {
@@ -23,18 +22,6 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // 로그인 페이지 반환
-    @GetMapping("/customLogin")
-    public String login() {
-        return "customLogin";
-    }
-
-    // 회원가입 페이지 반환
-    @GetMapping("/register")
-    public String registerForm() {
-        return "register";
-    }
-
     // 회원가입
     @PostMapping("/register")
     public String register(@ModelAttribute UserRequestDto dto, Model model) {
@@ -45,7 +32,7 @@ public class AuthController {
 
         userService.register(dto);
         System.out.println("회원가입 완료");
-        return "redirect:/customLogin";
+        return "redirect:/ui/customLogin";
     }
 }
 

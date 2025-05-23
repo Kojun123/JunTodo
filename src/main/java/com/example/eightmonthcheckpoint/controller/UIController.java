@@ -21,4 +21,16 @@ public class UIController {
         return "todoCalendar";
     }
 
+    // 로그인 페이지 반환
+    @GetMapping("/customLogin")
+    public String login() {
+        return "customLogin";
+    }
+
+    // 회원가입 페이지 반환
+    @GetMapping("/register")
+    public String registerForm() {
+        return "register";
+    }
+
 }

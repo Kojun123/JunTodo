@@ -357,7 +357,7 @@
                     .then(res => {
                         Swal.fire('탈퇴 완료', '이용해주셔서 감사합니다.', 'success')
                             .then(() => {
-                                window.location.href = '/customLogin'; // 또는 메인페이지
+                                window.location.href = '/ui/customLogin'; // 또는 메인페이지
                             });
                     })
                     .catch(error => {

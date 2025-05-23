@@ -28,7 +28,7 @@
             }
         %>
 
-        <form method="post" action="${pageContext.request.contextPath}/register">
+        <form method="post" action="${pageContext.request.contextPath}/ui/register">
             <div class="mb-3">
                 <label for="userId" class="form-label">아이디</label>
                 <input type="text" name="userId" id="userId" class="form-control" required />
@@ -45,7 +45,7 @@
         </form>
 
         <div class="text-center mt-3">
-            <a href="/customLogin">이미 계정이 있으신가요? 로그인</a>
+            <a href="/ui/customLogin">이미 계정이 있으신가요? 로그인</a>
         </div>
     </div>
 </div>

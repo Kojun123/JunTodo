@@ -1,3 +1,10 @@
+.calendar-layout {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    position: relative; /* 버튼 위치 기준 */
+}
+
 .todo-sidebar {
     width: 250px;
     padding: 1.5rem;
@@ -6,8 +13,6 @@
     height: 100vh;
     font-family: 'Noto Sans KR', sans-serif;
     transition: all 0.3s ease;
-    position: relative;
-    overflow-x: hidden;
 }
 
 .todo-sidebar.collapsed {
@@ -15,7 +20,6 @@
     padding: 1rem 0.5rem;
 }
 
-/* 접힌 상태에서 숨길 요소 */
 .todo-sidebar.collapsed .profile-box p,
 .todo-sidebar.collapsed .profile-box strong,
 .todo-sidebar.collapsed .sidebar-menu a:not(.icon-only) span,
@@ -24,21 +28,48 @@
     display: none !important;
 }
 
-/* 프로필 박스 */
+/* 사이드바 토글 버튼 - 바깥에 위치 */
+#sidebarToggle {
+    position: fixed; /* ✔ 화면 기준 고정 */
+    top: 20px;
+    left: 250px; /* 펼친 사이드바 기준 위치 */
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+}
+
+.todo-sidebar.collapsed ~ #sidebarToggle {
+    left: 60px;
+}
+
+.todo-sidebar.collapsed ~ #sidebarToggle i {
+    transform: rotate(180deg);
+}
+
+#sidebarToggle i {
+    transition: transform 0.3s ease;
+}
+
 .profile-box {
     font-size: 0.95rem;
     color: #333;
 }
 
-/* 메뉴 리스트 기본 구조 */
-.sidebar-menu li,
-.sidebar-projects li {
+.sidebar-menu li {
     list-style: none;
     margin-bottom: 1rem;
 }
 
-.sidebar-menu a,
-.sidebar-projects a {
+.sidebar-menu a {
     text-decoration: none;
     color: #333;
     font-size: 0.95rem;
@@ -47,35 +78,28 @@
     transition: all 0.2s ease;
 }
 
-.sidebar-menu a:hover,
-.sidebar-projects a:hover {
+.sidebar-menu a:hover {
     background-color: #f5f5f5;
     border-radius: 6px;
     padding: 0.25rem 0.5rem;
 }
 
-/* 아이콘 */
-.sidebar-menu a i,
-.sidebar-projects a i {
+.sidebar-menu a i {
     width: 20px;
     min-width: 20px;
     text-align: center;
 }
 
-/* 텍스트 (span 분리된 구조) */
-.sidebar-menu a span,
-.sidebar-projects a span {
+.sidebar-menu a span {
     margin-left: 8px;
 }
 
-/* 활성화 상태 */
 .sidebar-menu .active {
     font-weight: bold;
     background-color: #ffeceb;
     border-radius: 6px;
 }
 
-/* 점 아이콘 색상 */
 .dot {
     display: inline-block;
     width: 10px;
@@ -88,30 +112,3 @@
 .dot-yellow { background-color: #f9c74f; }
 .dot-blue { background-color: #4dabf7; }
 .dot-green { background-color: #51cf66; }
-
-/* 할 일 추가 강조 */
-.add-task {
-    font-weight: 600;
-}
-
-/* 토글 버튼 */
-#sidebarToggle {
-    position: absolute;
-    top: 10px;
-    right: -12px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    transition: all 0.3s;
-}
-
-.todo-sidebar.collapsed #sidebarToggle i {
-    transform: rotate(180deg);
-}

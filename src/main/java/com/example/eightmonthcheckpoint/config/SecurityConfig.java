@@ -28,12 +28,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
 //                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
-                        .requestMatchers( "/css/**", "/js/**", "/register","/customLogin").permitAll()
+                        .requestMatchers( "/css/**", "/js/**", "/register","/ui/customLogin").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(((request, response, authException) ->
-                                response.sendRedirect("/customLogin"))
+                                response.sendRedirect("/ui/customLogin"))
                         )
                 )
                 .addFilter(customFilter)
@@ -46,7 +46,7 @@ public class SecurityConfig {
 //                )
                 .logout(logout -> logout
                         .logoutUrl("/logout") // 기본 로그아웃 url
-                        .logoutSuccessUrl("/customLogin") // 성공시 이동할 url
+                        .logoutSuccessUrl("/ui/customLogin") // 성공시 이동할 url
                         .invalidateHttpSession(true) // 세션무효화
                         .deleteCookies("JSESSIONID") // 세션 쿠키 삭제
                 )
