@@ -144,8 +144,8 @@
 
     //card형 만드는 함수
     function createTodoCard(todo) {
-        const priorityColor = todo.priority === "high" ? "danger" :
-            todo.priority === "medium" ? "warning" : "success";
+        const priorityColor = todo.priority.toLowerCase() === "high" ? "danger" :
+            todo.priority.toLowerCase() === "medium" ? "warning" : "success";
 
         const createdDate = new Date(todo.createdAt);
         const formattedDate = `등록일 : \${createdDate.getMonth() + 1}월 \${createdDate.getDate()}일`;
