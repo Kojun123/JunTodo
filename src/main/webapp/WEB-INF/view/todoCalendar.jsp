@@ -88,6 +88,18 @@
         margin-left: 0.5rem;
     }
 
+    /* 상세팝업창 쓸모없는 ui 아이콘 숨김 */
+    .toastui-calendar-popup-section.toastui-calendar-section-detail
+    {
+        display: none !important;
+    }
+
+    /* edit /delete 버튼 숨김 */
+    .toastui-calendar-popup-section.toastui-calendar-section-button
+    {
+        display: none !important;
+    }
+
 </style>
 
 
@@ -116,6 +128,7 @@
 </body>
 
 <script>
+
     $(function () {
 
     })
@@ -125,52 +138,49 @@
         calendars: [
             {
                 id: 'HIGH',
-                name: '중요',
+                name: '중요도 : 높음',
                 backgroundColor: '#ff6b6b',
                 borderColor: '#ff6b6b'
             },
             {
                 id: 'MEDIUM',
-                name: '일상',
+                name: '중요도 : 보통',
                 backgroundColor: '#f9c74f',
                 borderColor: '#f9c74f'
             },
             {
                 id: 'LOW',
-                name: '언젠가',
+                name: '중요도 : 낮음',
                 backgroundColor: '#a3c9a8',
                 borderColor: '#a3c9a8'
             }
         ],
         template: {
-            popupDetailUser: (event) => {
-                console.log('popupDetailUser called');
-                return '';
-            },
             popupDetailDate(event) {
-                let data = event.raw;
-
-                const start = new Date(data.createdAt);
-                const start_parsing = start.toISOString().slice(0, 10);  // -> "2025-05-23"
-
-                console.log('detaildate', data);
-
-                return `\${start_parsing} - \${data.dueDate}`;
-            },
-            popupDetailState({ state }) {
                 return '';
             },
             popupDetailTitle(event) {
+                console.log('openCalendarPopup', event);
+                const data = event.raw;
+                const start = new Date(data.createdAt);
+                const start_parsing = start.toISOString().slice(0, 10);  // -> "2025-05-23"
+                const dueDate =  data.dueDate != null ? data.dueDate : '마감일 없음';
+
                 return `
                 <div>
-                    <strong>\${event.title}</strong>
-                    <div style="font-size: 12px; color: gray;">작성자: \${event.raw.attendees}</div>
+                    <strong>제목 : \${event.title}</strong>
+                    <div style="font-size: 12px; color: black;">작성자 : \${data.attendees}</div>
+                    <div style="font-size: 12px; color: black;">\${start_parsing}  - \${dueDate}</div>
+                    <div style="font-size: 12px; color: black;">내용 :  \${data.description}</div>
+                    <div style="font-size: 12px; color: black;">완료여부 :  \${data.completed == 'on' ? '여' : '부'}</div>
                 </div>
             `;
             }
         },
         useDetailPopup: true,
-        useCreationPopup: false
+        useCreationPopup: false,
+        selectable: false
+
     });
 
     updateCalendarTitle();
@@ -183,22 +193,10 @@
             .then(res => {
                 console.log('loadTodos', res);
 
-                const priorityColorMap = {
-                    HIGH: '#ff6b6b',
-                    MEDIUM: '#f9c74f',
-                    LOW: '#a3c9a8'
-                }
-
-                const priorityText = {
-                    HIGH : '중요',
-                    MEDIUM : '일상',
-                    LOW : '언젠가'
-                }
-
                 const todos = res.data.data.map(todo => ({
                     id: String(todo.id),
                         calendarId: `\${todo.priority}`,
-                        title: `[\${priorityText[todo.priority]}] \${todo.title}`,
+                        title: `\${todo.title}`,
                         category: 'allday',
                         start: todo.createdAt,
                         end: todo.dueDate,
@@ -257,6 +255,15 @@
     });
 
     calendar.on("viewDateRangeChange", updateCalendarTitle);
+
+    calendar.on('afterRenderEvent', () => {
+        setTimeout(() => {
+            document.querySelectorAll(
+                '.toastui-calendar-detail-item.toastui-calendar-detail-item-indent'
+            ).forEach(el => el.remove());
+        }, 3);
+    });
+
 
 </script>
 </html>
