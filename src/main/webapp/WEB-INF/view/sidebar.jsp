@@ -20,7 +20,7 @@
         <ul class="sidebar-menu mt-4">
             <li><a href="/"><i class="bi bi-calendar-day me-2 text-danger"></i><span>DashBoard</span></a></li>
             <li><a href="/ui/todoCalendar"><i class="bi bi-calendar2-week me-2"></i> <span>캘린더뷰</span></a></li>
-            <li><a href="#"><i class="bi bi-sliders2 me-2"></i> <span>필터 & 라벨</span></a></li>
+<%--            <li><a href="#"><i class="bi bi-sliders2 me-2"></i> <span>필터 & 라벨</span></a></li>--%>
         </ul>
 
         <hr>
