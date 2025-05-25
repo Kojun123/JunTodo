@@ -11,7 +11,7 @@ pipeline {
       steps { git url: 'https://github.com/Kojun123/zxTODOxz.git', branch: 'main' }
     }
     stage('Build & Test') {
-      steps { sh 'mvn clean package -DskipTests=false' }
+      steps { sh './gradlew clean build' }
     }
     stage('Docker Build & Push') {
       steps {
