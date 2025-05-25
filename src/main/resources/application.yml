@@ -1,9 +1,6 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/zxtodoxz?serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: kwonojou1120
+  profiles:
+    active: dev
   jpa:
     show-sql: true
     hibernate:
@@ -38,5 +35,30 @@ springdoc:
     title: TODO API
     description: TODO API 문서
     version: v1.0.0
+server:
+  forward-headers-strategy: framework
+
+
+---
+spring :
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/zxtodoxz?serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: kwonojou1120
+
+---
+spring :
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tododb?serverTimezone=UTC
+    username: todo
+    password: todopw
 
 

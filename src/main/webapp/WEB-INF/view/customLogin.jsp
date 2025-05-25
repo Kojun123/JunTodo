@@ -29,7 +29,7 @@
                     <span id="loginText">로그인</span>
                     <span id="loginSpinner" class="spinner-border spinner-border-sm d-none"></span>
                 </button>
-                <a href="${pageContext.request.contextPath}/register" class="btn btn-secondary mt-3">회원가입</a>
+                <a href="${pageContext.request.contextPath}/ui/register" class="btn btn-secondary mt-3">회원가입</a>
             </div>
         </div>
     </div>
