@@ -61,7 +61,7 @@ pipeline {
         // SSH 연결로 Lightsail 서버에 접속 후 Docker 컨테이너 실행
         sshagent([SSH_CRED]) {
           sh """
-            ssh -o StrictHostKeyChecking=no ubuntu@3.36.121.32 '
+            ssh -o StrictHostKeyChecking=no ubuntu@3.39.87.232 '
               docker pull ${IMAGE} &&  // 최신 이미지 가져오기
               docker stop eight-app || true &&  // 기존 컨테이너 중지
               docker rm eight-app || true &&    // 기존 컨테이너 삭제
