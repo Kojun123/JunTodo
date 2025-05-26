@@ -11,7 +11,7 @@ pipeline {
       steps { git url: 'https://github.com/Kojun123/zxTODOxz.git', branch: 'main' }
     }
     stage('Build & Test') {
-      steps { sh './gradlew clean build' }
+      steps { sh './gradlew clean build -Dspring.profiles.active=prod' }
     }
     stage('Docker Build & Push') {
       steps {
