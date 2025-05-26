@@ -1,48 +1,84 @@
 pipeline {
-  agent any
+  agent any  // 어떤 에이전트에서든 실행 가능하도록
+
   environment {
-    REGISTRY = 'kwonojun/zxtodoxz'
-    IMAGE    = "${REGISTRY}/my-app:${GIT_COMMIT.take(7)}"
-    SSH_CRED = 'lightsail-ssh'
-    DOCKER_CRED = 'dockerhub-cred'
+    REGISTRY = 'kwonojun/zxtodoxz'  // DockerHub 이미지 저장소
+    IMAGE    = "${REGISTRY}/my-app:${GIT_COMMIT.take(7)}"  // 커밋 해시 기반 태그 이미지 이름
+    SSH_CRED = 'lightsail-ssh'  // Jenkins에 저장된 SSH 키 (Lightsail 접속용)
+    DOCKER_CRED = 'dockerhub-cred'  // DockerHub 로그인용 Jenkins 자격증명 ID
   }
+
+  parameters {
+    booleanParam(
+      name: 'DEPLOY',
+      defaultValue: false,
+      description: '체크시 Lightsail에 배포.'  // 사용자가 수동으로 체크할 수 있는 파라미터 싱글파이프라인에서 사용됨
+    )
+  }
+
   stages {
+
     stage('Checkout') {
-      steps { git url: 'https://github.com/Kojun123/zxTODOxz.git', branch: 'main' }
+      steps {
+        // GitHub에서 코드 가져오기
+        git url: 'https://github.com/Kojun123/zxTODOxz.git', branch: 'main'
+      }
     }
+
     stage('Build & Test') {
-      steps { sh './gradlew clean build -Dspring.profiles.active=prod' }
+      steps {
+        // Gradle 빌드 및 테스트 실행 (prod 버전으로)
+        sh './gradlew clean build -Dspring.profiles.active=prod'
+      }
     }
+
     stage('Docker Build & Push') {
       steps {
         script {
+          // Docker 이미지 빌드
           docker.build(IMAGE)
-          docker.withRegistry('', DOCKER_CRED) { docker.image(IMAGE).push() }
+          // DockerHub에 이미지 푸시
+          docker.withRegistry('', DOCKER_CRED) {
+            docker.image(IMAGE).push()
+          }
         }
       }
     }
+
     stage('Deploy to Lightsail') {
+      when {
+        // DEPLOY 파라미터를 true로 체크한 경우에 실행함
+        expression {
+          return params.DEPLOY == true
+        }
+      }
       steps {
+        // SSH 연결로 Lightsail 서버에 접속 후 Docker 컨테이너 실행
         sshagent([SSH_CRED]) {
           sh """
             ssh -o StrictHostKeyChecking=no ubuntu@3.36.121.32 '
-              docker pull ${IMAGE} &&
-              docker stop eight-app || true &&
-              docker rm eight-app || true &&
-              docker run -d --name eight-app \\
-                --network host \\
-                -e SPRING_PROFILES_ACTIVE=prod \\
-                -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \\
-                -e SERVER_PORT=8080 \\
-                ${IMAGE}
+              docker pull ${IMAGE} &&  // 최신 이미지 가져오기
+              docker stop eight-app || true &&  // 기존 컨테이너 중지
+              docker rm eight-app || true &&    // 기존 컨테이너 삭제
+              docker run -d --name eight-app \\  // 새 컨테이너 실행
+                --network host \\  // host 네트워크 모드 사용
+                -e SPRING_PROFILES_ACTIVE=prod \\  // Spring profile 지정
+                -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \\  // DB 주소
+                -e SERVER_PORT=8080 \\  // 서버 포트
+                ${IMAGE}  // 이미지 실행
             '
           """
         }
       }
     }
   }
+
   post {
-    success { echo '배포 성공' }
-    failure { echo '배포 실패' }
+    success {
+      echo '배포 성공'  // 빌드 성공 메시지
+    }
+    failure {
+      echo '배포 실패'  // 빌드 실패 메시지
+    }
   }
 }
