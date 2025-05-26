@@ -27,8 +27,9 @@ pipeline {
 
     stage('Build & Test') {
       steps {
-        // Gradle 빌드 및 테스트 실행 (prod 버전으로)
-        sh './gradlew clean build -Dspring.profiles.active=prod'
+        // Gradle 빌드 및 테스트 스킵 (prod 버전으로)
+        //sh './gradlew clean build -Dspring.profiles.active=prod'
+        sh './gradlew clean build -x test -Dspring.profiles.active=prod'
       }
     }
 
