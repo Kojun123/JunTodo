@@ -7,7 +7,7 @@ pipeline {
 
   environment {
     REGISTRY = 'kwonojun/zxtodoxz'  // DockerHub 이미지 저장소
-    IMAGE    = "${REGISTRY}/my-app:${GIT_COMMIT.take(7)}"  // 커밋 해시 기반 태그 이미지 이름
+    IMAGE    = "${REGISTRY}:${GIT_COMMIT.take(7)}"  // 커밋 해시 기반 태그 이미지 이름
     SSH_CRED = 'lightsail-ssh'  // Jenkins에 저장된 SSH 키 (Lightsail 접속용)
     DOCKER_CRED = 'dockerhub-cred'  // DockerHub 로그인용 Jenkins 자격증명 ID
   }
