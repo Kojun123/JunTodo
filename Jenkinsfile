@@ -60,19 +60,22 @@ pipeline {
       steps {
         // SSH 연결로 Lightsail 서버에 접속 후 Docker 컨테이너 실행
         sshagent([SSH_CRED]) {
-                  sh '''
-              ssh -o StrictHostKeyChecking=no ubuntu@3.39.87.232 '
-                docker pull ${IMAGE}
-                docker stop eight-app || true
-                docker rm eight-app || true
-                docker run -d --name eight-app \
-                  --network host \
-                  -e SPRING_PROFILES_ACTIVE=prod \
-                  -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \
-                  -e SERVER_PORT=8080 \
-                  ${IMAGE}
-              '
-            '''
+          sshagent([SSH_CRED]) {
+            sh """
+    ssh -o StrictHostKeyChecking=no ubuntu@3.39.87.232 '
+      docker pull ${IMAGE} &&
+      docker stop eight-app || true &&
+      docker rm eight-app || true &&
+      docker run -d --name eight-app \\
+        --network host \\
+        -e SPRING_PROFILES_ACTIVE=prod \\
+        -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \\
+        -e SERVER_PORT=8080 \\
+        ${IMAGE}
+    '
+  """
+}
+
         }
       }
     }
