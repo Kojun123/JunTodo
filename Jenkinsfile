@@ -60,23 +60,27 @@ pipeline {
       steps {
         // SSH 연결로 Lightsail 서버에 접속 후 Docker 컨테이너 실행
         sshagent([SSH_CRED]) {
-          sh """
-            ssh -o StrictHostKeyChecking=no ubuntu@3.39.87.232 '
-              docker pull ${IMAGE} &&  // 최신 이미지 가져오기
-              docker stop eight-app || true &&  // 기존 컨테이너 중지
-              docker rm eight-app || true &&    // 기존 컨테이너 삭제
-              docker run -d --name eight-app \\  // 새 컨테이너 실행
-                --network host \\  // host 네트워크 모드 사용
-                -e SPRING_PROFILES_ACTIVE=prod \\  // Spring profile 지정
-                -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \\  // DB 주소
-                -e SERVER_PORT=8080 \\  // 서버 포트
-                ${IMAGE}  // 이미지 실행
-            '
-          """
+                  sh '''
+              ssh -o StrictHostKeyChecking=no ubuntu@3.39.87.232 '
+                docker pull ${IMAGE}
+                docker stop eight-app || true
+                docker rm eight-app || true
+                docker run -d --name eight-app \
+                  --network host \
+                  -e SPRING_PROFILES_ACTIVE=prod \
+                  -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \
+                  -e SERVER_PORT=8080 \
+                  ${IMAGE}
+              '
+            '''
         }
       }
     }
   }
+  /* 최신 이미지 가져오기 -> 기존 컨테이너 중지 -> 기존 컨테이너 삭제 -> 새 컨테이너 실행 -> host 네트워크 모드 사용 -> spring profile 지정
+    db주소 -> 서버포트 -> 이미지실행
+  */
+
 
   post {
     success {
