@@ -1,6 +1,10 @@
 pipeline {
   agent any  // 어떤 에이전트에서든 실행 가능하도록
 
+   options {
+    disableConcurrentBuilds()  // 동시에 여러 빌드 못 돌리게 막음 (현재 서버 스펙이 좋지않아 두개 이상이면 서버터짐..)
+  }
+
   environment {
     REGISTRY = 'kwonojun/zxtodoxz'  // DockerHub 이미지 저장소
     IMAGE    = "${REGISTRY}/my-app:${GIT_COMMIT.take(7)}"  // 커밋 해시 기반 태그 이미지 이름
