@@ -64,8 +64,7 @@ pipeline {
             sh """
     ssh -o StrictHostKeyChecking=no ubuntu@3.39.87.232 '
       docker pull ${IMAGE} &&
-      docker stop eight-app || true &&
-      docker rm eight-app || true &&
+  docker rm -f eight-app || true &&
       docker run -d --name eight-app \\
         --network host \\
         -e SPRING_PROFILES_ACTIVE=prod \\
