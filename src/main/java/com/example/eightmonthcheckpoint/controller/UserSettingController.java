@@ -6,10 +6,14 @@ import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -115,6 +119,40 @@ public class UserSettingController {
         userService.deleteUser(userId);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "회원 탈퇴 완료", null));
+    }
+
+
+    @Operation(
+            summary = "회원 가입"
+            ,description = "가입 정보를 받아 검증하고 계정 생성을 진행합니다."
+    )
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> register(@Valid @RequestBody UserRequestDto dto, BindingResult bindingResult) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("result",0);
+        result.put("message","정상 처리되었습니다.");
+
+        if (bindingResult.hasErrors()){
+            String errorField = bindingResult.getFieldErrors().get(0).getField();
+            String errorMsg = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+
+            result.put("result",-1);
+            result.put("errorField",errorField);
+            result.put("message",errorMsg);
+
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "BindingResult Error", result));
+        }
+
+        if (userService.existsByName(dto.getUserId())) {
+            result.put("result", -1);
+            result.put("errorField","existsByUser");
+            result.put("message", "이미 존재하는 사용자입니다.");
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "existByName Error", result));
+        }
+
+        userService.register(dto);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "회원가입 완료", result));
     }
 
 
