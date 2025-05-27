@@ -70,7 +70,6 @@ pipeline {
         --network host \\
         -e SPRING_PROFILES_ACTIVE=prod \\
         -e MYSQL_URL=jdbc:mysql://127.0.0.1:3306/dbname \\
-        -e SERVER_PORT=8080 \\
         ${IMAGE}
     '
   """
