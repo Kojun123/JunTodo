@@ -1,7 +1,10 @@
 package com.example.eightmonthcheckpoint.domain;
 
 
+import com.example.eightmonthcheckpoint.domain.Enum.Priority;
+import com.example.eightmonthcheckpoint.domain.Enum.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +35,8 @@ public class User {
     private String userId;
     private String nickname;
     private String password;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @CreatedDate
     @Column(updatable = false)
@@ -42,7 +46,7 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Builder
-    public User(Long id, String userId, String role, String nickname, String passWord,LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(Long id, String userId, Role role, String nickname, String passWord,LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;

@@ -1,5 +1,6 @@
 package com.example.eightmonthcheckpoint.service;
 
+import com.example.eightmonthcheckpoint.domain.Enum.Role;
 import com.example.eightmonthcheckpoint.domain.User;
 import com.example.eightmonthcheckpoint.dto.PasswordChangeRequestDto;
 import com.example.eightmonthcheckpoint.dto.UserRequestDto;
@@ -43,7 +44,7 @@ public class UserService {
         com.example.eightmonthcheckpoint.domain.User user = com.example.eightmonthcheckpoint.domain.User.builder()
                 .userId(dto.getUserId())
                 .passWord(encodedPassword)
-                .role(dto.getRole() != null ? dto.getRole() : "USER")
+                .role(dto.getRole() != null ? dto.getRole() : Role.USER)
                 .nickname(nickname)
                 .build();
 

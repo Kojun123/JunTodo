@@ -1,6 +1,7 @@
 package com.example.eightmonthcheckpoint.dto;
 
 
+import com.example.eightmonthcheckpoint.domain.Enum.Role;
 import com.example.eightmonthcheckpoint.domain.User;
 import lombok.*;
 
@@ -16,7 +17,7 @@ public class UserResponseDto {
     private Long id;
     private String nickname;
     private String userId;
-    private String role;
+    private Role role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -31,7 +32,7 @@ public class UserResponseDto {
     }
 
     // json 요청 용
-    public UserResponseDto(String nickname, String role, String createdAt, String updatedAt) {
+    public UserResponseDto(String nickname, Role role, String createdAt, String updatedAt) {
         this.nickname = nickname;
         this.role = role;
         this.createdAt = LocalDateTime.parse(createdAt);
