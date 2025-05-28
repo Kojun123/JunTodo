@@ -8,7 +8,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class TTTODoApplication {
+public class TTTODoApplication extends SpringBootServletInitializer{
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(TTTODoApplication.class);
+	}
 
 
 	public static void main(String[] args) {
