@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">--%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <style>
         body {
@@ -98,8 +98,8 @@
             cursor: pointer;
         }
         .login-btn {
-            margin-top: 1.5rem;
-            margin-bottom: 2rem;
+            margin-top: -3.5rem;
+            margin-bottom: 0rem;
         }
         /* 변경된 에러 메시지 스타일 */
         #errorMsg {
@@ -139,7 +139,7 @@
 
     <div class="links">
         <a href="${pageContext.request.contextPath}/ui/register">회원가입</a>·
-        <a href="${pageContext.request.contextPath}/find-id">아이디|비밀번호 찾기</a>
+        <a href="${pageContext.request.contextPath}/find-id">아이디 | 비밀번호 찾기</a>
     </div>
 
     <hr/>
