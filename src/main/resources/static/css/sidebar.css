@@ -32,7 +32,7 @@
 #sidebarToggle {
     position: fixed; /* ✔ 화면 기준 고정 */
     top: 20px;
-    left: 250px; /* 펼친 사이드바 기준 위치 */
+    left: 200px; /* 펼친 사이드바 기준 위치 */
     z-index: 9999;
     background: #fff;
     border: 1px solid #ccc;

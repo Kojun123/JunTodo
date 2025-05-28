@@ -199,8 +199,8 @@ body {
 /* 상단 검색 버튼 */
 .top-search-btn {
     position: fixed;
-    top: 20px;
-    right: 80px;
+    top: 38px;
+    right: 120px;
     background: #fff;
     border-radius: 50%;
     width: 44px;

@@ -24,9 +24,9 @@
         </ul>
 
         <hr>
+
     </aside>
 
-    <!-- ✅ 사이드바 바깥으로 이동한 버튼 -->
     <button id="sidebarToggle" class="btn btn-sm btn-light">
         <i class="bi bi-chevron-left"></i>
     </button>
