@@ -97,7 +97,7 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <input type="text" class="form-control" id="currentPassword" name="currentPassword" required style="flex: 1;">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="checkPassword()">확인</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="checkPassword('editPasswordChangeModal')">확인</button>
                                 </div>
                             </td>
                         </tr>
