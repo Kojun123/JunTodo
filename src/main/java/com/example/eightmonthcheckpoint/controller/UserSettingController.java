@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -143,7 +142,7 @@ public class UserSettingController {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, "BindingResult Error", result));
         }
 
-        if (userService.existsByName(dto.getUserId())) {
+        if (userService.existsById(dto.getUserId())) {
             result.put("result", -1);
             result.put("errorField","existsByUser");
             result.put("message", "이미 존재하는 사용자입니다.");
@@ -154,6 +153,20 @@ public class UserSettingController {
 
         return ResponseEntity.ok(new ApiResponse<>(true, "회원가입 완료", result));
     }
+
+    @Operation(
+            summary = "아이디 중복체크"
+            ,description = "신규가입자의 아이디를 받아 중복체크 합니다."
+    )
+    @GetMapping("/existsUserId")
+    public ResponseEntity<ApiResponse<Map<String, Boolean>>> existsUserId(Authentication authentication,@RequestParam String userId) {
+        Map<String, Boolean> result = new HashMap<>();
+        boolean existsById = userService.existsById(userId);
+        result.put("result",existsById);
+
+        return ResponseEntity.ok(new ApiResponse<>(true,"",result));
+    }
+
 
 
 }

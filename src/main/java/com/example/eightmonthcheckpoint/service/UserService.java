@@ -27,7 +27,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean existsByName(String userId) {
+    public boolean existsById(String userId) {
         return userRepository.findByUserId(userId).isPresent();
     }
 

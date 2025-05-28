@@ -55,7 +55,7 @@
                        required>
                 <button type="button"
                         class="btn btn-outline-secondary btn-pill"
-                        onclick="checkDup()">
+                        onclick="checkId()">
                     중복확인
                 </button>
             </div>
@@ -108,6 +108,18 @@
 
 <script>
     function register() {
+        // 검사실패일때
+        if (checkIdBoolean == false) {
+            Swal.fire({
+                icon: "error",
+                title: "아이디 중복검사!",
+                text: "아이디 중복검사를 먼저 진행해주세요!",
+                confirmButtonText: "확인",
+                heightAuto: false  // 창 자동으로 올라가는거 막아줌
+            })
+            return;
+        }
+
         const userId = $('#userId');
         const pw = $('#password');
         const pw2 = $('#passwordConfirm');
@@ -136,7 +148,8 @@
                     icon: "success",
                     title: "회원가입 성공!",
                     text: "회원가입 성공!",
-                    confirmButtonText: "확인"
+                    confirmButtonText: "확인",
+                    heightAuto: false  // 창 자동으로 올라가는거 막아줌
                 }).then(() => {
                     window.location.href = "/ui/customLogin";
                 });
@@ -160,6 +173,51 @@
                 }
 
             });
+    }
+
+    let checkIdBoolean = false;
+    //중복체크 여부 검사하는 변수 true : 검사성공 false: 검사실패
+    function checkId() {
+        const userId = $('#userId');
+
+        if (userId.val() == null || userId.val() == '') {
+            Swal.fire({
+                icon: 'error',
+                title: '아이디가 비어있습니다!',
+                text: '',
+                confirmButtonText: 'OK',
+                heightAuto: false  // 창 자동으로 올라가는거 막아줌
+            });
+            return;
+        }
+
+        axios.get(`/api/settings/existsUserId?userId=\${userId.val()}`)
+            .then(response => {
+                console.log('res',response);
+                if (response.data.data.result == true) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '사용 불가',
+                        text: '해당 아이디는 사용 불가합니다!',
+                        confirmButtonText: 'OK',
+                        heightAuto: false  // 창 자동으로 올라가는거 막아줌
+                        });
+                    checkIdBoolean = false;
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '사용 가능',
+                        text: '해당 아이디는 사용 가능합니다!',
+                        confirmButtonText: 'OK',
+                        heightAuto: false  // 창 자동으로 올라가는거 막아줌
+                    });
+                    checkIdBoolean = true;
+                }
+            })
+            .catch(error => console.log(error));
+
+
+
     }
 </script>
 </body>
