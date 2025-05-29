@@ -135,7 +135,8 @@
             </label>
         </div>
     <div id="errorMsg"></div>
-        <button id="loginBtn" type="submit" class="btn btn-dark btn-pill w-100 login-btn" onclick="login()">로그인</button>
+    <button id="loginBtn" type="submit" class="btn btn-dark btn-pill w-100 login-btn" onclick="login()">로그인</button>
+    <button id="loginBtn" type="submit" class="btn btn-dark btn-pill w-100" onclick="guestLogin()">게스트 로그인</button>
 
     <div class="links">
         <a href="${pageContext.request.contextPath}/ui/register">회원가입</a>·
@@ -187,6 +188,17 @@
     function togglePw() {
         const pw = document.getElementById('pw');
         pw.type = pw.type === 'password' ? 'text' : 'password';
+    }
+
+    function guestLogin() {
+        axios.post("/api/settings/guestLogin", {} ,{withCredentials:true})
+            .then(res => {
+                console.log('guestLogin', res.data.data);
+                localStorage.setItem("nickname", res.data.data.result.nickname);
+                window.location.href = "/";
+            }).catch(err => {
+            console.error(err);
+        });
     }
 </script>
 

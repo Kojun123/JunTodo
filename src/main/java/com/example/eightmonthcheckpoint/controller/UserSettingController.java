@@ -6,9 +6,12 @@ import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import com.example.eightmonthcheckpoint.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -165,6 +168,31 @@ public class UserSettingController {
         result.put("result",existsById);
 
         return ResponseEntity.ok(new ApiResponse<>(true,"",result));
+    }
+
+    @Operation(
+            summary = "게스트 로그인",
+            description = "게스트 로그인"
+    )
+    @PostMapping("/guestLogin")
+    public ResponseEntity<ApiResponse<?>> guestLogin(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session= request.getSession(true);
+        Map<String, Object> result = new HashMap<>();
+
+        Authentication guest = userService.createGuest();
+        SecurityContextHolder.getContext().setAuthentication(guest);
+
+        session.setAttribute(
+                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                SecurityContextHolder.getContext()
+        );
+
+        UserResponseDto userResponseDto = UserResponseDto.from(
+                ((CustomUserDetails)guest.getPrincipal()).getUser()
+        );
+
+        result.put("result",userResponseDto);
+        return ResponseEntity.ok(new ApiResponse<>(true,"게스트 로그인 성공",result));
     }
 
 

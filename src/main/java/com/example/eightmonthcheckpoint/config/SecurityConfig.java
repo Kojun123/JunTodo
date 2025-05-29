@@ -28,14 +28,16 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
 //                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
-                        .requestMatchers( "/css/**", "/js/**", "/ui/register","/api/settings/register","/ui/customLogin","/api/settings/existsUserId").permitAll()
+                        .requestMatchers( "/css/**", "/js/**", "/ui/register","/api/settings/register","/ui/customLogin","/api/settings/existsUserId", "/api/settings/guestLogin").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(((request, response, authException) ->
-                                response.sendRedirect("/ui/customLogin"))
-                        )
+                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                        .authenticationEntryPoint(((request, response, authException) ->
+//                                response.sendRedirect("/ui/customLogin"))
+//                        )
                 )
+                .anonymous(anonymous -> anonymous.principal("guestUser").authorities("GUEST"))
                 .addFilter(customFilter)
                 .sessionManagement(session -> session.maximumSessions(1)) // 로그인 최대 세션 1
 //                .formLogin(form -> form

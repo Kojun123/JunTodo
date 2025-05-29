@@ -9,9 +9,15 @@ import com.example.eightmonthcheckpoint.exception.DuplicateNicknameException;
 import com.example.eightmonthcheckpoint.exception.InvalidPasswordException;
 import com.example.eightmonthcheckpoint.exception.UserNotFoundException;
 import com.example.eightmonthcheckpoint.repository.UserRepository;
+import com.example.eightmonthcheckpoint.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -97,6 +103,19 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         userRepository.delete(user);
+    }
+
+    public Authentication createGuest() {
+        String Nickname = "guest" + + (int)(Math.random() * 100000);
+        User guest = User.builder()
+                .nickname(Nickname)
+                .role(Role.GUEST).build();
+
+        userRepository.save(guest);
+        UserResponseDto.from(guest);
+
+        UserDetails user = new CustomUserDetails(guest);
+        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 
 
