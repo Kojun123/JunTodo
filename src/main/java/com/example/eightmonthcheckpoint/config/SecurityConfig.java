@@ -32,10 +32,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
-                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-//                        .authenticationEntryPoint(((request, response, authException) ->
-//                                response.sendRedirect("/ui/customLogin"))
-//                        )
+//                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                        .authenticationEntryPoint(((request, response, authException) ->
+                                response.sendRedirect("/ui/customLogin"))
+                        )
                 )
                 .anonymous(anonymous -> anonymous.principal("guestUser").authorities("GUEST"))
                 .addFilter(customFilter)
