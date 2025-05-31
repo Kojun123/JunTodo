@@ -29,36 +29,53 @@ Swagger UI로 문서화된 API를 확인할 수 있습니다.
 Swagger : juntodo.site/swagger
 Jenkins : 비공개
 
-## 기능
+## 주요 기능
 - 투두 CRUD  
    할 일 생성·조회·수정·삭제  
-- 조건 조회  
-   오늘 생성한 할 일, 완료된 할 일, 전체 할 일 분류로 조회
+- 조건 조회
+   오늘 생성된 할 일, 완료된 할 일, 전체 할 일을 각각 분류해 조회할 수 있는 기능
 - 검색 조회
-    제목, 내용, 작성자로 검색하여 조건에 맞는 TODO 조회
+   제목 내용 작성자를 기준으로 키워드 검색해 조건에 맞는 TODO를 조회할 수 있는 기능
 - 캘린더 뷰  
    Toast UI Calendar로 일정 시각화  
-- 사용자 설정  
-   회원가입, 로그인, 비밀번호 변경, 유저명 변경(중복체크), 로그아웃, 회원탈퇴
+- 회원가입/로그인/게스트 로그인
+- 사용자 설정 페이지
+   비밀번호 변경, 유저명 변경, 회원탈퇴
 
 ---
 
 ## 기술 스택
-- 언어 & 프레임워크  
-  - Java 17, Spring Boot, Spring security
-- 데이터베이스 & ORM  
-  - MYSQL, Spring Data JPA(Hiberante)
-- 뷰 & 프론트엔드  
-  - JSP, HTML, CSS, JavaScript, jQuery  
-  - Bootstrap 5, Toast UI Calendar v2  
-- 인프라 & CI/CD  
-  - Docker, Jenkins, AWS Lightsail  
+
+- **언어 & 프레임워크**  
+  [![Java](https://img.shields.io/badge/Java-17-blue?logo=java&logoColor=white)](https://www.java.com/)  
+  [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)  
+  [![Spring Security](https://img.shields.io/badge/Spring%20Security-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-security)
+
+- **데이터베이스 & ORM**  
+  [![MySQL](https://img.shields.io/badge/MySQL-blue?logo=mysql&logoColor=white)](https://www.mysql.com/)  
+  [![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-data-jpa)  
+  [![Hibernate](https://img.shields.io/badge/Hibernate-orange?logo=hibernate&logoColor=white)](https://hibernate.org/)
+
+- **뷰 & 프론트엔드**  
+  [![JSP](https://img.shields.io/badge/JSP-grey?logo=java&logoColor=white)](https://javaee.github.io/javaee-spec/jsp/)  
+  [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/ko/docs/Web/Guide/HTML/HTML5)  
+  [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](https://developer.mozilla.org/ko/docs/Web/CSS)  
+  [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/ko/docs/Web/JavaScript)  
+  [![jQuery](https://img.shields.io/badge/jQuery-0769AD?logo=jquery&logoColor=white)](https://jquery.com/)  
+  [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.0-purple?logo=bootstrap&logoColor=white)](https://getbootstrap.com/)  
+  [![Toast UI Calendar](https://img.shields.io/badge/Toast%20UI%20Calendar-v2-blue)](https://ui.toast.com/tui-calendar)
+
+- **인프라 & CI/CD**  
+  [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)  
+  [![Jenkins](https://img.shields.io/badge/Jenkins-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)  
+  [![AWS Lightsail](https://img.shields.io/badge/AWS%20Lightsail-FF9900?logo=amazonaws&logoColor=white)](https://aws.amazon.com/lightsail/)
+
 
 ---
 
 ## 프로젝트 구조
 
-
+-*
 
 ---
 
@@ -75,7 +92,7 @@ Lightsail 플랜 성능이 아쉬워 당장은 적극 활용하지 않지만, �
 
 --
 
-*API 호출 예시는 Swagger UI에서 확인해주시기 바랍니다.*  
+*API 호출 예시는 Swagger UI에서 확인할 수 있습니다.*
 
 화면 스크린샷
 
