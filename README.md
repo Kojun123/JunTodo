@@ -171,8 +171,32 @@ Lightsail 플랜 성능이 아쉬워 당장은 적극 활용하지 않지만, �
 --
 
 *API 호출 예시는 Swagger UI에서 확인할 수 있습니다.*
+## 화면 스크린샷
 
-화면 스크린샷
+# 로그인 화면
+![image](https://github.com/user-attachments/assets/76cff383-0a74-4ad3-b542-0b40d17f71a9)
+
+# 회원가입 화면
+
+![image](https://github.com/user-attachments/assets/d254a0aa-5708-4e62-be99-ed30149c0197)
+
+
+
+# 화면 대시보드
+![image](https://github.com/user-attachments/assets/04a17f41-1573-42cd-981f-00b7a60e67ff)
+
+# 캘린더뷰 
+![image](https://github.com/user-attachments/assets/0caef165-2e91-4511-9ccd-3ff1c300beea)
+
+# 유저정보
+![image](https://github.com/user-attachments/assets/d5286a29-7f82-495b-90eb-70acfc053b9f)
+
+
+
+#젠킨스
+![image](https://github.com/user-attachments/assets/d3e374bb-e2c0-4675-8f25-ad1afdb6ca50)
+
+
 
 
 
