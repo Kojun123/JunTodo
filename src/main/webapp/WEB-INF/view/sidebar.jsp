@@ -12,6 +12,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="/ui/settings">내 정보</a></li>
+<%--                <li><a id="adminPage" class="dropdown-item" href="/ui/admin">관리자페이지</a></li>--%>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item text-danger" href="#" onclick="fn_logout()">로그아웃</a></li>
             </ul>

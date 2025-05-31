@@ -139,8 +139,9 @@
     <button id="loginBtn" type="submit" class="btn btn-dark btn-pill w-100" onclick="guestLogin()">게스트 로그인</button>
 
     <div class="links">
-        <a href="${pageContext.request.contextPath}/ui/register">회원가입</a>·
-        <a href="${pageContext.request.contextPath}/find-id">아이디 | 비밀번호 찾기</a>
+        <a href="${pageContext.request.contextPath}/ui/register">회원가입</a>
+<%--        ·--%>
+<%--        <a href="${pageContext.request.contextPath}/find-id">비밀번호 찾기</a>--%>
     </div>
 
     <hr/>
