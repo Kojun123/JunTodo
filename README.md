@@ -75,10 +75,6 @@ Jenkins : 비공개
 
 ## 프로젝트 구조
 
-
-
-## 프로젝트 구조
-
 ```plaintext
 └── zxTODOxz-main
     ├── .gitignore
