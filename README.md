@@ -198,6 +198,8 @@ Lightsail 플랜 성능이 아쉬워 당장은 적극 활용하지 않지만, �
 #젠킨스
 ![image](https://github.com/user-attachments/assets/d3e374bb-e2c0-4675-8f25-ad1afdb6ca50)
 
+# swagger
+![image](https://github.com/user-attachments/assets/ae90d32e-32c2-4429-8014-5f358d6c2de5)
 
 
 
