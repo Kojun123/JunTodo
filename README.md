@@ -75,7 +75,85 @@ Jenkins : 비공개
 
 ## 프로젝트 구조
 
--*
+└── zxTODOxz-main
+    ├── .gitignore
+    ├── Dockerfile
+    ├── Jenkinsfile
+    ├── README.md
+    ├── build.gradle
+    ├── gradlew
+    ├── gradlew.bat
+    ├── settings.gradle
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   │   └── com
+    │   │   │       └── example
+    │   │   │           └── eightmonthcheckpoint
+    │   │   │               ├── TTTODoApplication.java
+    │   │   │               ├── config
+    │   │   │               │   ├── AppConfig.java
+    │   │   │               │   ├── SwaggerConfig.java
+    │   │   │               │   └── WebMvcConfig.java
+    │   │   │               ├── controller
+    │   │   │               │   ├── AuthController.java
+    │   │   │               │   ├── LectureController.java
+    │   │   │               │   ├── MainController.java
+    │   │   │               │   ├── TodoController.java
+    │   │   │               │   └── UserController.java
+    │   │   │               ├── domain
+    │   │   │               │   ├── Lecture.java
+    │   │   │               │   ├── Todo.java
+    │   │   │               │   └── User.java
+    │   │   │               ├── dto
+    │   │   │               │   ├── LectureDto.java
+    │   │   │               │   ├── TodoDto.java
+    │   │   │               │   └── UserDto.java
+    │   │   │               ├── exception
+    │   │   │               │   ├── CustomErrorResponse.java
+    │   │   │               │   ├── GlobalExceptionHandler.java
+    │   │   │               │   └── NotFoundException.java
+    │   │   │               ├── repository
+    │   │   │               │   ├── LectureRepository.java
+    │   │   │               │   ├── TodoRepository.java
+    │   │   │               │   └── UserRepository.java
+    │   │   │               ├── security
+    │   │   │               │   ├── CustomAuthenticationFilter.class
+    │   │   │               │   ├── CustomUserDetailService.class
+    │   │   │               │   └── CustomUserDetails.class
+    │   │   │               └── service
+    │   │   │                   ├── LectureService.java
+    │   │   │                   ├── TodoService.java
+    │   │   │                   └── UserService.java
+    │   │   └── resources
+    │   │       ├── static
+    │   │       │   ├── css
+    │   │       │   │   └── style.css
+    │   │       │   └── js
+    │   │       │       └── script.js
+    │   │       ├── templates
+    │   │       │   ├── fragment
+    │   │       │   │   └── header.html
+    │   │       │   ├── index.html
+    │   │       │   ├── lecture-list.html
+    │   │       │   ├── todo-form.html
+    │   │       │   ├── todoCalendar.html
+    │   │       │   ├── todoList.html
+    │   │       │   └── userInfo.html
+    │   │       └── application.properties
+    │   └── test
+    │       └── java
+    │           └── com
+    │               └── example
+    │                   └── eightmonthcheckpoint
+    │                       ├── EightMonthCheckpointApplicationTests.java
+    │                       └── UserTest.java
+    ├── web
+    │   └── WEB-INF
+    │       └── web.xml
+    └── zxTODOxz-main.iml
+
+
 
 ---
 
