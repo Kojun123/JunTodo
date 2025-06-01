@@ -94,15 +94,73 @@ Role.USER, Role.GUEST, Role.ADMIN 권한 분리
 
 특정 URL은 permitAll로 열어둠(로그인·회원가입·게스트 로그인 등)
 
-### Global Exception Handling
+### 예외처리 구조
 
-@RestControllerAdvice + @ExceptionHandler 사용
+#### ApplicationException 클래스
+   
+![image](https://github.com/user-attachments/assets/790ae875-13f7-4e66-9af1-972c1932c00c)
 
-모든 예외를 CustomErrorResponse 형태로 통일해서 반환
+- HttpStatus와 메시지를 받는 생성자로 구현
 
-UserNotFound, DuplicateNickname, InvalidPassword, AccessDenied 등 커스텀 예외 처리
+- 생성자 내부에서 super(message) 로 예외 메시지 설정
 
-- Enum 활용
+- getStatus() 메서드로 저장된 HTTP 상태 코드 반환
+
+#### 커스텀 예외 클래스
+
+ApplicationException 을 상속받아 클래스 생성
+
+![image](https://github.com/user-attachments/assets/fcb30700-a321-4bf5-9592-7d0e507c1b6c)
+
+위처럼 super(HttpStatus.CONFLICT, "메시지") 를 호출해 상태 코드와 메시지를 지정
+
+서비스나 컨트롤러 로직에서 조건 검사 후 throw new 커스텀예외()로 호출하여 사용
+
+```plaintext
+if (userRepository.existsByNickname(nickname)) {
+    throw new DuplicateNicknameException();    
+}
+```
+
+#### GlobalExceptionHandler (@RestControllerAdvice)
+
+- @ExceptionHandler(ApplicationException.class)
+
+- ApplicationException 발생 시 ApiResponse<Void> 로 { success:false, message, result:null } 반환
+
+HTTP 응답 상태는 ex.getStatus() 로 설정
+
+@ExceptionHandler(RuntimeException.class)
+
+그 외 예상치 못한 예외를 모두 잡아 HTTP 500 + "서버 오류가 발생했습니다." 메시지 반환
+
+응답은 ApiResponse<Void> { success:false, message:"서버 오류가 발생했습니다.", result:null }
+
+### 공통응답
+
+모든 응답을 일관된 JSON 포맷으로 통일
+
+```plaintext
+{
+  "success": false,
+  "message": "에러 메시지",
+  "result": null
+}
+```
+
+![image](https://github.com/user-attachments/assets/cdb01fa9-37ce-4caf-be38-915a22e26786)
+
+예시 : 
+
+![image](https://github.com/user-attachments/assets/ba3b9eee-3192-4a2d-96c0-a7ac25fef6c7)
+
+
+
+
+### Enum
+
+  ![image](https://github.com/user-attachments/assets/2f396c1e-6058-453f-95aa-ab90787b1846)
+
 - 검색 분류(오늘 생성한 할일, 완료한 할일, 전체할일), 검색 필터(SearchFilter) 등
 
 ### JPA Auditing
