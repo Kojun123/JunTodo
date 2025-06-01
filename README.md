@@ -16,12 +16,17 @@
 
 ## 프로젝트 소개
 JUNTODO는 Spring Boot 기반의 웹 애플리케이션으로, 
+
 jpa, security를 학습하며 docker로 배포하고 jenkins로 ci/cd를 해보자 라는 취지로 시작된 프로젝트입니다.
 
 Spring Security로 세션 기반 로그인·회원가입·비밀번호 변경·로그아웃·회원탈퇴 등을 처리하고,
+
 프론트엔드에서는 JSP와 jQuery(Axios), Toast UI Calendar 캘린더 뷰를 사용하여 개발하였습니다.
+
 CI/CD 파이프라인은 Jenkinsfile를 사용했으며 
+
 git push -> jenkins가 check out ->  gradle로 빌드 -> docker image 생성 ->  AWS EC2(Lightsail) 배포 과정으로 진행되며
+
 Swagger UI로 문서화된 API를 확인할 수 있습니다.  
 
 ---
