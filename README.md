@@ -61,9 +61,9 @@ Swagger UI로 문서화된 API를 확인할 수 있습니다.
 
 ## 배포 주소
 
-메인: juntodo.site
+메인: https://juntodo.site
 
-Swagger : juntodo.site/swagger
+Swagger : https://juntodo.site/swagger (로그인 후 확인 가능)
 
 Jenkins : 비공개
 
