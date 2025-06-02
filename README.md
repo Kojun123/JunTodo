@@ -169,11 +169,9 @@ HTTP 응답 상태는 ex.getStatus() 로 설정
 
 별도 로직 없이 DB에 자동 기록
 
-### 게스트 로그인 & 배치 삭제
+### 게스트 로그인
 
 Role.GUEST 계정 즉시 생성 후 세션 로그인
-
-@Scheduled(cron="0 0 0 * * *")로 24시간 지난 GUEST 계정 일괄 삭제
 
 ### Toast UI Calendar 사용하여 캘린더뷰 구현
 
