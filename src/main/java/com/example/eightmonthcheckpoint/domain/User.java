@@ -38,11 +38,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @CreatedDate
+    @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-//    @LastModifiedDate
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Builder
