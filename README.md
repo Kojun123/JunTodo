@@ -192,7 +192,6 @@ Jenkinsfile에 테스트 → 빌드 → Docker 이미지 생성 → AWS Lightsai
 눌러서 수동 배포 진행
 
 
-### 단위 테스트(JUnit5)
 
 ---
 
@@ -215,6 +214,9 @@ Jenkinsfile에 테스트 → 빌드 → Docker 이미지 생성 → AWS Lightsai
     │   │   │       └── example
     │   │   │           └── eightmonthcheckpoint
     │   │   │               ├── TTTODoApplication.java
+    │   │   │               ├── batch
+    │   │   │               │   ├── Tasklets.java
+    │   │   │               │   ├── UserBatchConfig.java
     │   │   │               ├── config
     │   │   │               │   ├── AppConfig.java
     │   │   │               │   ├── SwaggerConfig.java
@@ -272,6 +274,8 @@ Jenkinsfile에 테스트 → 빌드 → Docker 이미지 생성 → AWS Lightsai
     │                   └── eightmonthcheckpoint
     │                       ├── EightMonthCheckpointApplicationTests.java
     │                       └── UserTest.java
+    │       └── resources
+    │         ├── application-test.yml
     ├── web
     │   └── WEB-INF
     │       └── web.xml
