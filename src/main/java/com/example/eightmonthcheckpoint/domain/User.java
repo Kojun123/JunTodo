@@ -38,11 +38,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @CreatedDate
+//    @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+//    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Builder
@@ -54,5 +54,18 @@ public class User {
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "todos=" + todos +
+                ", id=" + id +
+                ", userId='" + userId + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", role=" + role +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                "}\n";
     }
 }
