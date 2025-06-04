@@ -6,7 +6,6 @@
 - [프로젝트 소개](#프로젝트-소개)
 - [기술 스택](#기술-스택)
 - [배포 주소](#배포-주소)
-- [간략 기능](#간략-기능)
 - [주요 기능](#주요-기능)
 - [프로젝트 구조](#프로젝트-구조)  
 - [모니터링](#모니터링)
@@ -37,6 +36,7 @@ Swagger UI로 문서화된 API를 확인할 수 있습니다.
   [![Java](https://img.shields.io/badge/Java-17-blue?logo=java&logoColor=white)](https://www.java.com/)  
   [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)  
   [![Spring Security](https://img.shields.io/badge/Spring%20Security-green?logo=spring&logoColor=white)](https://spring.io/projects/spring-security)
+  [![Spring Batch](https://img.shields.io/badge/Spring%20Batch-6DB33F?logo=spring-batch&logoColor=white)](https://spring.io/projects/spring-batch)
 
 - **데이터베이스 & ORM**  
   [![MySQL](https://img.shields.io/badge/MySQL-blue?logo=mysql&logoColor=white)](https://www.mysql.com/)  
@@ -57,6 +57,7 @@ Swagger UI로 문서화된 API를 확인할 수 있습니다.
   [![Jenkins](https://img.shields.io/badge/Jenkins-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)  
   [![AWS Lightsail](https://img.shields.io/badge/AWS%20Lightsail-FF9900?logo=amazonaws&logoColor=white)](https://aws.amazon.com/lightsail/)
 
+
   ---
 
 ## 배포 주소
@@ -66,19 +67,6 @@ Swagger UI로 문서화된 API를 확인할 수 있습니다.
 Swagger : https://juntodo.site/swagger (로그인 후 확인 가능)
 
 Jenkins : 비공개
-
-## 간략 기능
-- 투두 CRUD  
-   할 일 생성·조회·수정·삭제  
-- 조건 조회
-   오늘 생성된 할 일, 완료된 할 일, 전체 할 일을 각각 분류해 조회할 수 있는 기능
-- 검색 조회
-   제목 내용 작성자를 기준으로 키워드 검색해 조건에 맞는 TODO를 조회할 수 있는 기능
-- 캘린더 뷰  
-   Toast UI Calendar로 일정 시각화  
-- 회원가입/로그인/게스트 로그인
-- 사용자 설정 페이지
-   비밀번호 변경, 유저명 변경, 회원탈퇴
 
 ---
 
@@ -169,9 +157,22 @@ HTTP 응답 상태는 ex.getStatus() 로 설정
 
 별도 로직 없이 DB에 자동 기록
 
-### 게스트 로그인
+### 게스트 로그인 && SPRING BATCH 활용하여 생성된지 24시간 지난 게스트 계정 자동삭
 
-Role.GUEST 계정 즉시 생성 후 세션 로그인
+게스트 계정 즉시 생성 후 세션 로그인기능.
+
+게스트 계정이 생성된 지 24시간이 지나면 스케줄러(@Scheduled)로 배치(Job)를 실행하여 해당 계정을 자동 삭제
+
+<img width="915" alt="{592F91BB-B820-4E79-B4A3-8B0E3EF16498}" src="https://github.com/user-attachments/assets/2223371c-5af5-4a93-94ab-cb7aeebb6cec" />
+
+
+Tasklet을 이용해 삭제 로직을 분리하고 Job·Step을 구성해서 진행.
+
+<img width="767" alt="{B30EC1E4-E636-4CC7-9C75-A4E97BC9D994}" src="https://github.com/user-attachments/assets/807d6cd2-eb26-4359-a529-b0b9676fa620" />
+
+
+배치 데이터는 기본 BATCH_* 테이블에 기록되어, 실행 이력, 성공/실패 여부를 모니터링 가능
+
 
 ### Toast UI Calendar 사용하여 캘린더뷰 구현
 
