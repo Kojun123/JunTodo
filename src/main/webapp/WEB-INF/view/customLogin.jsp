@@ -103,7 +103,7 @@
         }
         /* 변경된 에러 메시지 스타일 */
         #errorMsg {
-            display: none;
+            display: block;
             font-size: 0.9rem;
             color: #dc3545;
             text-align: left;
@@ -134,7 +134,6 @@
 <%--                <input type="checkbox" name="remember-me" /> 로그인 유지--%>
             </label>
         </div>
-    <div id="errorMsg"></div>
     <button id="loginBtn" type="submit" class="btn btn-dark btn-pill w-100 login-btn" onclick="login()">로그인</button>
     <button id="loginBtn" type="submit" class="btn btn-dark btn-pill w-100" onclick="guestLogin()">게스트 로그인</button>
 
@@ -162,17 +161,17 @@
     function login() {
         const user = document.getElementById("username").value.trim();
         const pass = document.getElementById("password").value.trim();
-        const err  = document.getElementById("errorMsg");
+        const err  = $('#errorMsg');
         const btn  = document.getElementById("loginBtn");
 
+        $('#errorMsg').addClass('d-none').text('');
+
         if (!user || !pass) {
-            err.textContent = "아이디와 비밀번호를 모두 입력하세요.";
-            err.style.display = "block";
+            err.removeClass('d-none').text("아이디와 비밀번호를 모두 입력하세요.");
             return;
         }
 
-        btn.disabled = true;
-        err.style.display = "none";
+        // btn.disabled = true;
 
         axios.post("/api/login", { username:user, password:pass }, { withCredentials:true })
             .then(res => {
@@ -180,8 +179,7 @@
                 window.location.href = "/";
             })
             .catch(e => {
-                err.textContent = "아이디 또는 비밀번호를 확인하세요.";
-                err.style.display = "block";
+                err.removeClass('d-none').text("아이디 또는 비밀번호를 확인해주세요.");
             })
             .finally(() => btn.disabled = false);
     }
