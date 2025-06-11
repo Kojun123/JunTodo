@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 
@@ -14,7 +15,15 @@
                 <li><a class="dropdown-item" href="/ui/settings">내 정보</a></li>
 <%--                <li><a id="adminPage" class="dropdown-item" href="/ui/admin">관리자페이지</a></li>--%>
                 <li><hr class="dropdown-divider"></li>
+<%--                <sec:authorize access="isAuthenticated()">--%>
+<%--                    현재 세션 권한 →--%>
+<%--                    <sec:authentication property="authorities"/>--%>
+<%--                </sec:authorize>--%>
                 <li><a class="dropdown-item text-danger" href="#" onclick="fn_logout()">로그아웃</a></li>
+                <sec:authorize access="hasAuthority('ADMIN')">
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#" onclick="">관리자 페이지</a></li>
+                </sec:authorize>
             </ul>
         </div>
 
