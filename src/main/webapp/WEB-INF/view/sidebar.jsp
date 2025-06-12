@@ -22,7 +22,7 @@
                 <li><a class="dropdown-item text-danger" href="#" onclick="fn_logout()">로그아웃</a></li>
                 <sec:authorize access="hasAuthority('ADMIN')">
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#" onclick="">관리자 페이지</a></li>
+                    <li><a class="dropdown-item text-danger" href="/ui/admin/DashBoard" onclick="">관리자 페이지</a></li>
                 </sec:authorize>
             </ul>
         </div>
@@ -61,7 +61,6 @@
             })
             .catch(err => {console.error('Logout failed : ', err)});
     }
-
 
     //사이드바 토글
     document.getElementById("sidebarToggle").addEventListener("click", () => {
